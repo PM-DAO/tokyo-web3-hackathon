@@ -1,33 +1,26 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+
+import { useMetaMask } from "metamask-react";
+
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { status, connect, account, chainId, ethereum } = useMetaMask()
+
+  if (status === "initializing") return <div>Synchronisation with MetaMask ongoing...</div>
+
+  if (status === "unavailable") return <div>MetaMask not available :(</div>
+
+  if (status === "notConnected") return <button onClick={connect}>Connect to MetaMask</button>
+
+  if (status === "connecting") return <div>Connecting...</div>
+
+  console.log(ethereum)
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <>
+      <div>Connected account {account} on chain ID {chainId}</div>
+    </>
   )
 }
 
