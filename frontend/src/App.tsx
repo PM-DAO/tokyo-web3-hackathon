@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useMetaMask } from "metamask-react";
 
 import './App.css'
