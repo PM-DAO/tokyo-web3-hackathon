@@ -1,10 +1,9 @@
-const dappUrl = 'pm-dao.github.io'
-const metamaskAppDeepLink = 'https://metamask.app.link/dapp/' + dappUrl
+const metamaskAppDeepLink = 'dapp://pm-dao.github.io'
 
 export const MetamaskMobile = () => {
   return (
     <a href={metamaskAppDeepLink} target="_self">
-      <button>test, Connect to MetaMask</button>
+      <button>Connect to MetaMask</button>
     </a>
   )
 }
