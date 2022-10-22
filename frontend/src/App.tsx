@@ -3,14 +3,12 @@ import './App.css'
 import { useIsMobileDevice } from './modules/hooks/is_mobile'
 import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
 import { useEffect, useState } from 'react'
-
-interface Ethereum {
-  selectedAddress: string
-}
+import detectEthereumProvider from '@metamask/detect-provider'
 
 declare global {
   interface Window {
-    ethereum?: Ethereum
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ethereum?: any
   }
 }
 
@@ -19,10 +17,23 @@ function App() {
   const [account, setAccount] = useState('')
 
   useEffect(() => {
-    if (window.ethereum) {
-      setAccount(window.ethereum.selectedAddress)
+    const init = async () => {
+      const provider = await detectEthereumProvider()
+      if (provider && window.ethereum?.isMetaMask) {
+        const accounts = await window.ethereum.request({
+          method: 'eth_accounts'
+        })
+        if (accounts.length > 0) {
+          const account = accounts[0]
+          setAccount(account)
+          return
+        }
+      } else {
+        console.log('Please Install MetaMask')
+      }
     }
-  }, [window.ethereum, window.ethereum?.selectedAddress])
+    init()
+  }, [])
 
   return (
     <>
