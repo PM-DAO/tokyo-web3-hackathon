@@ -1,25 +1,33 @@
-import { useMetaMask } from 'metamask-react'
-
 import './App.css'
 
+import { useIsMobileDevice } from './modules/hooks/is_mobile'
+import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
+import { useEffect, useState } from 'react'
+
+interface Ethereum {
+  selectedAddress: string
+}
+
+declare global {
+  interface Window {
+    ethereum?: Ethereum
+  }
+}
+
 function App() {
-  const { status, connect, account, chainId, ethereum } = useMetaMask()
+  const isMobile = useIsMobileDevice()
+  const [account, setAccount] = useState('')
 
-  if (status === 'initializing') return <div>Synchronisation with MetaMask ongoing...</div>
-
-  if (status === 'unavailable') return <div>MetaMask not available :(</div>
-
-  if (status === 'notConnected') return <button onClick={connect}>Connect to MetaMask</button>
-
-  if (status === 'connecting') return <div>Connecting...</div>
-
-  console.log(ethereum)
+  useEffect(() => {
+    if (window.ethereum) {
+      setAccount(window.ethereum.selectedAddress)
+    }
+  }, [window.ethereum, window.ethereum?.selectedAddress])
 
   return (
     <>
-      <div>
-        Connected account {account} on chain ID {chainId}
-      </div>
+      {isMobile ? <MetamaskMobile /> : <MetamaskDesktop onSetAccount={setAccount} />}
+      {account && <div>Connected account {account}</div>}
     </>
   )
 }
