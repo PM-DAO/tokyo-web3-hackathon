@@ -4,7 +4,7 @@ import { useIsMobileDevice } from './modules/hooks/is_mobile'
 import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
 import { useEffect, useState } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider'
-import Web3 from 'web3'
+import { ethers } from 'ethers'
 
 declare global {
   interface Window {
@@ -21,14 +21,10 @@ function App() {
     const init = async () => {
       const provider = await detectEthereumProvider()
       if (provider && window.ethereum?.isMetaMask) {
-        const web3 = new Web3(Web3.givenProvider)
-        web3.eth.defaultChain = 'ropsten'
-        const accounts = await web3.eth.requestAccounts()
-        if (accounts.length > 0) {
-          const account = accounts[0]
-          setAccount(account)
-          return
-        }
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = await provider.getSigner()
+        const address = await signer.getAddress()
+        setAccount(address)
       } else {
         setAccount('Please Install MetaMask')
       }
@@ -38,7 +34,7 @@ function App() {
 
   return (
     <>
-      {isMobile ? <MetamaskMobile /> : <MetamaskDesktop onSetAccount={setAccount} />}
+      {!account && isMobile ? <MetamaskMobile /> : <MetamaskDesktop onSetAccount={setAccount} />}
       {account && <div>Connected account {account}</div>}
     </>
   )
