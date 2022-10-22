@@ -1,25 +1,41 @@
-import { useMetaMask } from 'metamask-react'
-
 import './App.css'
 
+import { useIsMobileDevice } from './modules/hooks/is_mobile'
+import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
+import { useEffect, useState } from 'react'
+import detectEthereumProvider from '@metamask/detect-provider'
+import { ethers } from 'ethers'
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ethereum?: any
+  }
+}
+
 function App() {
-  const { status, connect, account, chainId, ethereum } = useMetaMask()
+  const isMobile = useIsMobileDevice()
+  const [account, setAccount] = useState('')
 
-  if (status === 'initializing') return <div>Synchronisation with MetaMask ongoing...</div>
-
-  if (status === 'unavailable') return <div>MetaMask not available :(</div>
-
-  if (status === 'notConnected') return <button onClick={connect}>Connect to MetaMask</button>
-
-  if (status === 'connecting') return <div>Connecting...</div>
-
-  console.log(ethereum)
+  useEffect(() => {
+    const init = async () => {
+      const provider = await detectEthereumProvider()
+      if (provider && window.ethereum?.isMetaMask) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = await provider.getSigner()
+        const address = await signer.getAddress()
+        setAccount(address)
+      } else {
+        setAccount('Please Install MetaMask')
+      }
+    }
+    init()
+  }, [])
 
   return (
     <>
-      <div>
-        Connected account {account} on chain ID {chainId}
-      </div>
+      {!account && isMobile ? <MetamaskMobile /> : <MetamaskDesktop onSetAccount={setAccount} />}
+      {account && <div>Connected account {account}</div>}
     </>
   )
 }
