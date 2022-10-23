@@ -1,0 +1,18 @@
+{
+  "name": "hardhat-project",
+  "scripts": {
+    "start": "hardhat node",
+    "deploy": "hardhat run scripts/deploy.ts --network localhost",
+    "deploy:mumbai": "hardhat run scripts/deploy.ts --network mumbai",
+    "debug:mint": "hardhat run scripts/mint.ts --network localhost",
+    "debug:mint:mumbai": "hardhat run scripts/mint.ts --network mumbai",
+    "debug:burn:mumbai": "hardhat run scripts/burn.ts --network mumbai"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "hardhat": "^2.12.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3"
+  }
+}
