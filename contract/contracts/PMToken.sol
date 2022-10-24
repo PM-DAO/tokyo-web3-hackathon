@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
     using Counters for Counters.Counter;
+    mapping(address => uint) public lockTime;
 
     Counters.Counter private _tokenIdCounter;
 
@@ -51,5 +52,20 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+   //function to donate funds to the faucet contract
+	function donateTofaucet() public payable {
+	}
+
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
+
+    function faucet(uint amount) public payable {
+        require(block.timestamp > lockTime[msg.sender], "lock time has not expired. Please try again later");
+        require(address(this).balance > amount, "Not enough funds in the contract. donate required");
+        Address.sendValue(payable(msg.sender), amount);
+        lockTime[msg.sender] = block.timestamp + 10 minutes;
     }
 }
