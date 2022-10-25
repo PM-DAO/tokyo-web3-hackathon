@@ -57,13 +57,12 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
         return super.supportsInterface(interfaceId);
     }
 
-    //function to donate funds to the token
 	function donateToToken(uint tokenId) public payable {
         require(_exists(tokenId), "Token not exists");
         _donateToToken(tokenId);
     }
 
-	function _donateToToken(uint tokenId) internal {
+    function _donateToToken(uint tokenId) internal {
         balancePerToken[tokenId] = balancePerToken[tokenId] + msg.value;
     }
 
