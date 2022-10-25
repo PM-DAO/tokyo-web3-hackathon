@@ -1,13 +1,13 @@
-import { expect } from "chai"
-import { ethers } from "hardhat"
-import { Contract } from "ethers"
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers"
+import { expect } from 'chai'
+import { ethers } from 'hardhat'
+import { Contract } from 'ethers'
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 
-const contractName = "PMToken"
-const dummyURL = "http://example.com"
+const contractName = 'PMToken'
+const dummyURL = 'http://example.com'
 
-describe("Token contract", function () {
+describe('Token contract', function () {
   let contract: Contract
   let owner: SignerWithAddress
   let addr1: SignerWithAddress
@@ -20,36 +20,73 @@ describe("Token contract", function () {
     contract = await factory.deploy()
   })
 
-  it("Deployment should assign the total supply of tokens to the owner", async function () {
+  it('Deployment should assign the total supply of tokens to the owner', async function () {
     const ownerBalance = await contract.balanceOf(owner.address)
     expect(await contract.totalSupply()).to.equal(ownerBalance)
   })
 
-  it("safesafeMint success", async function () {
+  it('safesafeMint success', async function () {
     expect(await contract.totalSupply()).to.equal(0)
     await contract.safeMint(owner.address, dummyURL)
     expect(await contract.totalSupply()).to.equal(1)
   })
 
-  it("safeMint is onlyOwner", async function () {
+  it('safeMint is onlyOwner', async function () {
     expect(await contract.totalSupply()).to.equal(0)
     await expect(contract.connect(addr1).safeMint(addr1.address, dummyURL)).to.be.reverted
     expect(await contract.totalSupply()).to.equal(0)
   })
 
-  it("fauset", async function () {
+  it('donate and withdraw success', async function () {
+    const defaultAmount = ethers.utils.parseEther('10000')
     const donateAmount = ethers.utils.parseEther('1')
-    const invalidAmount = ethers.utils.parseEther('2')
-    const faucetAmount = ethers.utils.parseEther('0.1')
+    const restAmount = ethers.utils.parseEther('0.99')
+    const tokenId = 0
+    await contract.safeMint(owner.address, dummyURL)
+    
+    expect(contract.donateToToken(9999, {value: donateAmount})).to.revertedWith('Token not exists')
+    await contract.donateToToken(0, {value: donateAmount})
+    expect(await contract.getBalance()).to.equal(donateAmount)
+    expect(await contract.getBalanceOfToken(tokenId)).to.equal(donateAmount)
+    expect(await addr1.getBalance()).to.not.greaterThan(defaultAmount)
+    
+    expect(await contract.connect(addr1).withdrawFromToken(tokenId)).to.not.be.reverted
+    expect(await contract.getBalance()).to.equal(restAmount)
+    expect(await contract.getBalanceOfToken(tokenId)).to.equal(restAmount)
+    expect(await addr1.getBalance()).to.greaterThan(defaultAmount)
+    expect(contract.connect(addr1).withdrawFromToken(tokenId)).to.be.revertedWith('lock time has not expired. Please try again later')
+  })
 
-    await contract.donateTofaucet({value: donateAmount})
-    expect(await contract.getBalance()).to.equal(BigInt(1000000000000000000))
+  it('withdraw success from 2 tokens', async function () {
+    const donateAmount = ethers.utils.parseEther('0.1')
+    await contract.safeMint(owner.address, dummyURL)
+    await contract.safeMint(owner.address, dummyURL)
+    await contract.donateToToken(0, {value: donateAmount})
+    await contract.donateToToken(1, {value: donateAmount})
+    expect(await contract.getBalance()).to.equal(ethers.utils.parseEther('0.2'))
+    expect(await contract.connect(addr1).withdrawFromToken(0)).to.not.be.reverted
+    expect(await contract.getBalance()).to.equal(ethers.utils.parseEther('0.199'))
+    expect(await contract.connect(addr1).withdrawFromToken(1)).to.not.be.reverted
+    expect(await addr1.getBalance()).to.greaterThan(ethers.utils.parseEther('1.019'))
+  })
 
-    expect(contract.connect(addr1).faucet(invalidAmount)).to.be.revertedWith("Not enough funds in the contract. donate required")
-    expect(await addr1.getBalance()).to.not.greaterThan(BigInt(10000000000000000000000))
-    expect(await contract.connect(addr1).faucet(faucetAmount)).to.not.be.reverted
-    expect(await contract.getBalance()).to.equal(BigInt(900000000000000000))
-    expect(await addr1.getBalance()).to.greaterThan(BigInt(10000000000000000000000))
-    expect(contract.connect(addr1).faucet(faucetAmount)).to.be.revertedWith("lock time has not expired. Please try again later")
+    it('setDistributeNum success', async function () {
+    const defaultAmount = ethers.utils.parseEther('10000')
+    const donateAmount = ethers.utils.parseEther('1')
+    const restAmount = ethers.utils.parseEther('0')
+    const tokenId = 0
+    await contract.safeMint(owner.address, dummyURL)
+    await contract.donateToToken(0, {value: donateAmount})
+    expect(contract.setDistoributeNum(0, 0.1)).to.be.reverted
+    expect(contract.setDistoributeNum(0, 0)).to.be.revertedWith("Num must be greater than 0")
+    expect(contract.setDistoributeNum(0, -1)).to.be.reverted
+    expect(contract.setDistoributeNum(9999, 1)).to.be.revertedWith("Token not exists")
+    expect(contract.connect(addr2).setDistoributeNum(0, 1)).to.be.revertedWith("Caller is not token owner")
+    await contract.setDistoributeNum(0, 1)
+    
+    expect(await contract.connect(addr1).withdrawFromToken(tokenId)).to.not.be.reverted
+    expect(await contract.getBalance()).to.equal(restAmount)
+    expect(await contract.getBalanceOfToken(tokenId)).to.equal(restAmount)
+    expect(await addr1.getBalance()).to.greaterThan(defaultAmount)
   })
 })
