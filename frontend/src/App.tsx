@@ -6,6 +6,7 @@ import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
 import { Account, TokenList } from './components/organisms'
 import { useWeb3Client } from './modules/hooks/web3client'
 import { useTokens } from './modules/hooks/tokens'
+import { ChannelBar } from './components/molecules/ChannelBar'
 
 declare global {
   interface Window {
@@ -22,6 +23,7 @@ function App() {
   return (
     <>
       {!account && isMobile ? <MetamaskMobile /> : <MetamaskDesktop onSetAccount={setAccount} />}
+      <ChannelBar channel={{ name: 'main' }} />
       <Account account={account} chain={chain} />
       <div>tokens</div>
       <TokenList tokens={tokens} />
