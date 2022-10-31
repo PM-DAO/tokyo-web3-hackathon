@@ -70,23 +70,29 @@ describe('Token contract', function () {
     expect(await addr1.getBalance()).to.greaterThan(ethers.utils.parseEther('1.019'))
   })
 
-    it('setDistributeNum success', async function () {
+  it('setDistributeNum success', async function () {
     const defaultAmount = ethers.utils.parseEther('10000')
     const donateAmount = ethers.utils.parseEther('1')
     const restAmount = ethers.utils.parseEther('0')
     const tokenId = 0
     await contract.safeMint(owner.address, dummyURL)
     await contract.donateToToken(0, {value: donateAmount})
-    expect(contract.setDistoributeNum(0, 0.1)).to.be.reverted
-    expect(contract.setDistoributeNum(0, 0)).to.be.revertedWith("Num must be greater than 0")
-    expect(contract.setDistoributeNum(0, -1)).to.be.reverted
-    expect(contract.setDistoributeNum(9999, 1)).to.be.revertedWith("Token not exists")
-    expect(contract.connect(addr2).setDistoributeNum(0, 1)).to.be.revertedWith("Caller is not token owner")
-    await contract.setDistoributeNum(0, 1)
+    expect(contract.setDistoributeNum(0.1)).to.be.reverted
+    expect(contract.setDistoributeNum(0)).to.be.revertedWith("Num must be greater than 0")
+    expect(contract.setDistoributeNum(-1)).to.be.reverted
+    expect(contract.connect(addr2).setDistoributeNum(1)).to.be.revertedWith("Caller is not token owner")
+    await contract.setDistoributeNum(1)
     
     expect(await contract.connect(addr1).withdrawFromToken(tokenId)).to.not.be.reverted
     expect(await contract.getBalance()).to.equal(restAmount)
     expect(await contract.getBalanceOfToken(tokenId)).to.equal(restAmount)
     expect(await addr1.getBalance()).to.greaterThan(defaultAmount)
+  })
+
+  it('setContentURI success', async function () {
+    await contract.safeMint(owner.address, dummyURL)
+    expect(await contract.contentURI(0)).to.equal("")
+    expect(contract.setContentURI(0, "http://example.com")).not.to.be.reverted
+    expect(await contract.contentURI(0)).to.equal("http://example.com")
   })
 })
