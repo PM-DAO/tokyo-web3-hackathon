@@ -88,4 +88,11 @@ describe('Token contract', function () {
     expect(await contract.getBalanceOfToken(tokenId)).to.equal(restAmount)
     expect(await addr1.getBalance()).to.greaterThan(defaultAmount)
   })
+
+  it('setContentURI success', async function () {
+    await contract.safeMint(owner.address, dummyURL)
+    expect(await contract.contentURI(0)).to.equal("")
+    expect(contract.setContentURI(0, "http://example.com")).not.to.be.reverted
+    expect(await contract.contentURI(0)).to.equal("http://example.com")
+  })
 })

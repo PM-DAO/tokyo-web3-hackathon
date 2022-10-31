@@ -14,6 +14,9 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
   mapping(uint => uint) public balancePerToken;
   uint public distributeNum;
 
+  // Optional mapping for music content
+  mapping(uint256 => string) private _contentURIs;
+
   Counters.Counter private _tokenIdCounter;
 
   constructor() ERC721("PMToken", "PMT") {
@@ -34,10 +37,6 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
     override(ERC721, ERC721Enumerable)
   {
     super._beforeTokenTransfer(from, to, tokenId);
-  }
-
-  function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-    super._burn(tokenId);
   }
 
   function tokenURI(uint256 tokenId)
@@ -89,6 +88,24 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
 
   function getBalance() public view returns(uint) {
     return address(this).balance;
+  }
+
+  function contentURI(uint256 tokenId) public view returns (string memory) {
+    _exists(tokenId);
+    return _contentURIs[tokenId];
+  }
+
+  function setContentURI(uint256 tokenId, string memory _contentURI) public {
+    require(_isOwner(msg.sender, tokenId), "Caller is not token owner");
+    require(_exists(tokenId), "URI set of nonexistent token");
+    _contentURIs[tokenId] = _contentURI;
+  }
+
+  function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    super._burn(tokenId);
+    if (bytes(_contentURIs[tokenId]).length != 0) {
+      delete _contentURIs[tokenId];
+    }
   }
 
   function _isOwner(address spender, uint256 tokenId) internal view returns (bool) {
