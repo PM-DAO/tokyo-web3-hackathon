@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 
-const contractAddress = '0xAdA669C89c9FDFe4BBD38133B2C35e35B3CBEEF6'
+const contractAddress = '0x26310B0F213022021053d896ebbDebdaE886479C'
 
 // MetaMask puclic key @maito1201
 const toAddress = '0xcBe10B9C0554ae99D9ec5d64e3E2F900615670dE'
@@ -9,7 +9,8 @@ async function main() {
   const PMT = await ethers.getContractFactory("PMToken");
   const token = await PMT.attach(contractAddress)
   // tokenURI is Music video of LITE / Infinite Mirror
-  const log = await token.safeMint(toAddress, 'https://www.youtube.com/watch?v=bzQFu1kEHWQ')
+  // const log = await token.safeMint(toAddress, 'https://example.com')
+  const log = await token.setContentURI(1, 'https://www.youtube.com/watch?v=bzQFu1kEHWQ')
   console.log(`minted ${log.hash}`);
 }
 

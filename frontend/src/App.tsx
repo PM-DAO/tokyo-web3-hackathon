@@ -19,13 +19,11 @@ function App() {
   const isMobile = useIsMobileDevice()
   const { account, setAccount, chain, client } = useWeb3Client()
   const { tokens } = useTokens(client)
-
   return (
     <>
       {!account && isMobile ? <MetamaskMobile /> : <MetamaskDesktop onSetAccount={setAccount} />}
       <ChannelBar channel={{ name: 'main' }} />
       <Account account={account} chain={chain} />
-      <div>tokens</div>
       <TokenList tokens={tokens} />
     </>
   )
