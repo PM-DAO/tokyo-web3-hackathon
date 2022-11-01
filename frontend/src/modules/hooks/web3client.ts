@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 
 import artifact from '../../abi/PMToken.json'
 
-const nft_address = '0xAdA669C89c9FDFe4BBD38133B2C35e35B3CBEEF6'
+const nft_address = '0x26310B0F213022021053d896ebbDebdaE886479C'
 
 const chainId = '0x13881'
 
