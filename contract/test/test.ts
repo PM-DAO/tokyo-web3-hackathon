@@ -85,7 +85,7 @@ describe('Token contract', function () {
     
     expect(await contract.connect(addr1).withdrawFromToken(tokenId)).to.not.be.reverted
     expect(await contract.getBalance()).to.equal(restAmount)
-    expect(await contract.getBalanceOfToken(tokenId)).to.equal(restAmount)
+    expect(contract.getBalanceOfToken(tokenId)).to.be.revertedWith("Token not exists")
     expect(await addr1.getBalance()).to.greaterThan(defaultAmount)
   })
 
