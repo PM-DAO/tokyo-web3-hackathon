@@ -74,6 +74,9 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
     Address.sendValue(payable(msg.sender), amount);
     balancePerToken[tokenId] = balancePerToken[tokenId] - amount;
     lockTimeOfToken[msg.sender][tokenId] = block.timestamp + 7 days;
+    if (balancePerToken[tokenId] < 100) {
+      _burn(tokenId);
+    }
   }
 
   function setDistoributeNum(uint num) public onlyOwner {
