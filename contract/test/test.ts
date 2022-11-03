@@ -92,7 +92,8 @@ describe('Token contract', function () {
   it('setContentURI success', async function () {
     await contract.safeMint(owner.address, dummyURL)
     expect(await contract.contentURI(0)).to.equal("")
-    expect(contract.setContentURI(0, "http://example.com")).not.to.be.reverted
+    expect(contract.setContentURI(0, "http://example.com")).to.be.revertedWith("setContent needs tx value more than 100 wei")
+    expect(contract.setContentURI(0, "http://example.com", { value: 100 })).not.to.be.reverted
     expect(await contract.contentURI(0)).to.equal("http://example.com")
   })
 })

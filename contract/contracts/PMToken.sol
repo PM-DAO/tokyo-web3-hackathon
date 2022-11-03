@@ -11,8 +11,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
   using Counters for Counters.Counter;
   mapping(address => mapping(uint => uint)) public lockTimeOfToken;
-  mapping(uint => uint) public balancePerToken;
-  uint public distributeNum;
+  mapping(uint => uint) public _balancePerToken;
+  uint public _distributeNum;
 
   // Optional mapping for music content
   mapping(uint256 => string) private _contentURIs;
@@ -20,7 +20,7 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
   Counters.Counter private _tokenIdCounter;
 
   constructor() ERC721("PMToken", "PMT") {
-    distributeNum = 100;
+    _distributeNum = 100;
   }
 
   function safeMint(address to, string memory uri) public onlyOwner {
@@ -63,34 +63,39 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
   }
 
   function _donateToToken(uint tokenId) internal {
-    balancePerToken[tokenId] = balancePerToken[tokenId] + msg.value;
+    _balancePerToken[tokenId] = _balancePerToken[tokenId] + msg.value;
   }
 
   function withdrawFromToken(uint tokenId) public payable {
     require(_exists(tokenId), "Token not exists");
     require(block.timestamp > lockTimeOfToken[msg.sender][tokenId], "lock time has not expired. Please try again later");
-    uint amount = balancePerToken[tokenId] / distributeNum;
-    require(balancePerToken[tokenId] >= amount, "Not enough funds in the token. donate required");
+    uint amount = _balancePerToken[tokenId] / _distributeNum;
+    require(_balancePerToken[tokenId] >= amount, "Not enough funds in the token. donate required");
     Address.sendValue(payable(msg.sender), amount);
-    balancePerToken[tokenId] = balancePerToken[tokenId] - amount;
+    _balancePerToken[tokenId] = _balancePerToken[tokenId] - amount;
     lockTimeOfToken[msg.sender][tokenId] = block.timestamp + 7 days;
-    if (balancePerToken[tokenId] < 100) {
-      _burn(tokenId);
-    }
+    // NOTE: token that isn't have donation will burn in production
+    // if (_balancePerToken[tokenId] < 100) {
+    //   _burn(tokenId);
+    // }
   }
 
   function setDistoributeNum(uint num) public onlyOwner {
     require(num > 0, "Num must be greater than 0");
-    distributeNum = num;
+    _distributeNum = num;
   }
 
   function getBalanceOfToken(uint tokenId) public view returns(uint) {
     require(_exists(tokenId), "Token not exists");
-    return balancePerToken[tokenId];
+    return _balancePerToken[tokenId];
   }
 
   function getBalance() public view returns(uint) {
     return address(this).balance;
+  }
+
+  function estimateEarn(uint256 tokenId) public view returns(uint) {
+    return _balancePerToken[tokenId] / _distributeNum;
   }
 
   function contentURI(uint256 tokenId) public view returns (string memory) {
@@ -98,10 +103,12 @@ contract PMToken is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, 
     return _contentURIs[tokenId];
   }
 
-  function setContentURI(uint256 tokenId, string memory _contentURI) public {
+  function setContentURI(uint256 tokenId, string memory _contentURI) public payable {
     require(_isOwner(msg.sender, tokenId), "Caller is not token owner");
     require(_exists(tokenId), "URI set of nonexistent token");
+    require (msg.value >= 100, "setContent needs tx value more than 100 wei");
     _contentURIs[tokenId] = _contentURI;
+    _balancePerToken[tokenId] =  msg.value;
   }
 
   function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
