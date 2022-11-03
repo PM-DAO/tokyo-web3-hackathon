@@ -1,13 +1,13 @@
 import { ethers } from "hardhat";
 
-const contractAddress = '0x26310B0F213022021053d896ebbDebdaE886479C'
+const contractAddress = '0x250ad80574bf9733713A8cB38769F91264D7C5e1'
 
 async function main() {
-  // TODO: 必要な数だけデプロイする
+  const tokenId = 0
   const PMT = await ethers.getContractFactory("PMToken");
   const token = await PMT.attach(contractAddress)
-  const log = await token.burn(0)
-  console.log(`burned ${log.hash}`);
+  const log = await token.burn(tokenId)
+  console.log(`burned ${log.hash}`)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
