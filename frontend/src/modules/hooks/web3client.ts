@@ -3,6 +3,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import { ethers } from 'ethers'
 
 import artifact from '../../abi/PMToken.json'
+import { PMToken } from '../../types'
 
 const nft_address = '0x250ad80574bf9733713A8cB38769F91264D7C5e1'
 
@@ -21,7 +22,7 @@ const chainConfig = {
 }
 
 export const useWeb3Client = () => {
-  const [client, setClient] = useState<ethers.Contract>()
+  const [client, setClient] = useState<PMToken>()
   const [account, setAccount] = useState('')
   const [chain, setChain] = useState('')
   useEffect(() => {
@@ -33,7 +34,7 @@ export const useWeb3Client = () => {
         const address = await signer.getAddress()
         setAccount(address)
 
-        const contract = new ethers.Contract(nft_address, artifact.abi, provider)
+        const contract = new ethers.Contract(nft_address, artifact.abi, provider) as PMToken
         setClient(contract.connect(signer))
 
         if (process.env.NODE_ENV !== 'development') {
