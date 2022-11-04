@@ -14,6 +14,7 @@ export const useTokens = (client?: PMToken): ReturnUseTokens => {
       const { totalSupply, tokenByIndex, contentURI } = client.functions
       const supply = parseInt(await totalSupply().toString())
       const items: TokenItem[] = []
+      // #TODO: order tokens by slot
       for (let i = 0; i < supply; i++) {
         const tokenID = parseInt(await tokenByIndex(i).toString())
         const uri = await contentURI(tokenID)
