@@ -24,7 +24,7 @@ const DEFAULT_DISTRIBUTE_NUM = 100
 export const useDistribute = ({ account, client }: Props): ReturnDistribute => {
   const [status, setStatus] = useState<Status>()
 
-  const distribute = useCallback(async ({ youtubeURL, tokenId, _tokenAmount }: DistributeArgs) => {
+  const distribute = async ({ youtubeURL, tokenId, _tokenAmount }: DistributeArgs) => {
     if (!account || !client) return
     setStatus('idle')
     // NOTE: confirmation required
@@ -45,7 +45,7 @@ export const useDistribute = ({ account, client }: Props): ReturnDistribute => {
       setStatus('failed')
       console.error({ err })
     }
-  }, [])
+  }
 
   return { status, distribute }
 }
