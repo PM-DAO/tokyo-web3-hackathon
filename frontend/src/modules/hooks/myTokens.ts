@@ -8,7 +8,11 @@ type Props = {
   account?: string
 }
 
-export const useMyTokens = ({ account, client }: Props) => {
+type ReturnUseMyTokens = {
+  myTokens: TokenMetadata[]
+}
+
+export const useMyTokens = ({ account, client }: Props): ReturnUseMyTokens => {
   const [myTokens, setMyTokens] = useState<TokenMetadata[]>([])
 
   useEffect(() => {

@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react'
 import { TokenItem } from '../../types/tokenItem'
 import { PMToken } from '../../types'
 
-export const useTokens = (client?: PMToken) => {
-  const [tokens, setTokens] = useState<Array<TokenItem>>([])
+type ReturnUseTokens = {
+  tokens: TokenItem[]
+}
+
+export const useTokens = (client?: PMToken): ReturnUseTokens => {
+  const [tokens, setTokens] = useState<TokenItem[]>([])
   useEffect(() => {
     const getTokens = async () => {
       if (!client) return
