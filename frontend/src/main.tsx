@@ -5,15 +5,12 @@ import { MetaMaskProvider } from 'metamask-react'
 
 import App from './App'
 import './index.css'
-import { Web3ClientContextProvider } from './contexts'
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ChakraProvider>
       <MetaMaskProvider>
-        <Web3ClientContextProvider>
-          <App />
-        </Web3ClientContextProvider>
+        <App />
       </MetaMaskProvider>
     </ChakraProvider>
   </React.StrictMode>

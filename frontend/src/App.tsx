@@ -1,14 +1,15 @@
 import './App.css'
-import { RouterProvider } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { useIsMobileDevice } from './modules/hooks/userIsMobileDevice'
-import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
-
-import { Account, TokenList } from './components/organisms'
 import { useTokens } from './modules/hooks/useTokens'
+import { useWeb3Client } from './modules/hooks/useWeb3Client'
+
+import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
+import { Account, TokenList } from './components/organisms'
+
 import { Stream, Collection, StreamSetting, Login } from './components/pages'
-import { createBrowserRouter } from 'react-router-dom'
-import { useWeb3ClientContext } from './contexts'
+
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
 
 function App() {
   const isMobile = useIsMobileDevice()
-  const { account, setAccount, chain, client } = useWeb3ClientContext()
+  const { account, setAccount, chain, client } = useWeb3Client()
   const { tokens } = useTokens(client)
   return (
     <>

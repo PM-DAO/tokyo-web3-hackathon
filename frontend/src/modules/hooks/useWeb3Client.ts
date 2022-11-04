@@ -1,9 +1,9 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { ethers } from 'ethers'
 
-import artifact from '../abi/PMToken.json'
-import { PMToken } from '../types'
+import artifact from '../../abi/PMToken.json'
+import { PMToken } from '../../types'
 
 const NFT_ADDRESS = '0x250ad80574bf9733713A8cB38769F91264D7C5e1'
 const ABI = artifact.abi
@@ -21,34 +21,14 @@ const CHAIN_CONFIG = {
   rpcUrls: ['https://rpc-mumbai.maticvigil.com']
 }
 
-type Value = {
+type ReturnUseWeb3Client = {
   account: string
+  setAccount: React.Dispatch<React.SetStateAction<string>>
   client?: PMToken
   chain: string
 }
 
-type Dispatch = {
-  setAccount: React.Dispatch<React.SetStateAction<string>>
-}
-
-const initialValue: Value = {
-  account: '',
-  client: undefined,
-  chain: ''
-}
-
-const Web3ClientValueContext = createContext<Value>(initialValue)
-
-const Web3ClientSetContext = createContext<Dispatch>({
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setAccount: () => {}
-})
-
-type Props = {
-  children: ReactNode
-}
-
-export const Web3ClientContextProvider = ({ children }: Props) => {
+export const useWeb3Client = (): ReturnUseWeb3Client => {
   const [client, setClient] = useState<PMToken>()
   const [account, setAccount] = useState('')
   const [chain, setChain] = useState('')
@@ -89,24 +69,5 @@ export const Web3ClientContextProvider = ({ children }: Props) => {
     }
     init()
   }, [])
-
-  return (
-    <Web3ClientValueContext.Provider value={{ account, client, chain }}>
-      <Web3ClientSetContext.Provider value={{ setAccount }}>{children}</Web3ClientSetContext.Provider>
-    </Web3ClientValueContext.Provider>
-  )
-}
-
-type ReturnUseWeb3ClientContext = Value & Dispatch
-
-export const useWeb3ClientContext = (): ReturnUseWeb3ClientContext => {
-  const { account, client, chain } = useContext(Web3ClientValueContext)
-  const { setAccount } = useContext(Web3ClientSetContext)
-
-  return {
-    account,
-    client,
-    chain,
-    setAccount
-  }
+  return { account, setAccount, chain, client }
 }
