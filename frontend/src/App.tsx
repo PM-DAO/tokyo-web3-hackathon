@@ -1,7 +1,7 @@
 import './App.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-import { useIsMobileDevice } from './modules/hooks/userIsMobileDevice'
+import { useIsMobileDevice } from './modules/hooks/useIsMobileDevice '
 import { useTokens } from './modules/hooks/useTokens'
 import { useWeb3Client } from './modules/hooks/useWeb3Client'
 
