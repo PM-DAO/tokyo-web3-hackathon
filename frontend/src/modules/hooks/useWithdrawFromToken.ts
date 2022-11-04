@@ -26,6 +26,7 @@ export const useWithdrawFromToken = ({ client }: Props): ReturnDistribute => {
     setStatus('idle')
     try {
       client.withdrawFromToken(tokenId)
+      setStatus('success')
     } catch (err) {
       setStatus('failed')
       console.error({ err })
