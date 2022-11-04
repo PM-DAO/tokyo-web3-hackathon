@@ -1,11 +1,11 @@
 import './App.css'
 import { RouterProvider } from 'react-router-dom'
 
-import { useIsMobileDevice } from './modules/hooks/is_mobile'
+import { useIsMobileDevice } from './modules/hooks/userIsMobileDevice'
 import { MetamaskDesktop, MetamaskMobile } from './components/atoms'
 
 import { Account, TokenList } from './components/organisms'
-import { useTokens } from './modules/hooks/tokens'
+import { useTokens } from './modules/hooks/useTokens'
 import { Stream, Collection, StreamSetting, Login } from './components/pages'
 import { createBrowserRouter } from 'react-router-dom'
 import { useWeb3ClientContext } from './contexts'
