@@ -1,5 +1,5 @@
-import { TokenItem } from '../../../types/tokenItem'
-import { TokenCard } from '../../molecules'
+import { TokenItem } from '~/types/tokenItem'
+import { TokenCard } from '~/components/molecules'
 
 type TokenListProps = {
   tokens: TokenItem[]
