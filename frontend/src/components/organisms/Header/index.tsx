@@ -1,7 +1,7 @@
 import { Box, Container, HStack, Image, Flex, Spacer, useColorMode } from '@chakra-ui/react'
-import { useThemeColor } from '../../../modules/hooks/useThemeColor'
-import { getImageUrl } from '../../../modules/images/getImageUrl'
-import { OwnMaticBox, NFTButton, HomeButton } from '../../molecules'
+import { useThemeColor } from '~/modules/hooks/useThemeColor'
+import { getImageUrl } from '~/modules/images/getImageUrl'
+import { OwnMaticBox, NFTButton, HomeButton } from '~/components/molecules'
 
 export const Header = () => {
   const { bgColor } = useThemeColor()

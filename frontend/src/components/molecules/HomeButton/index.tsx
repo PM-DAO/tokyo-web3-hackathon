@@ -1,5 +1,5 @@
 import { Flex, Image } from '@chakra-ui/react'
-import { getImageUrl } from '../../../modules/images/getImageUrl'
+import { getImageUrl } from '~/modules/images/getImageUrl'
 
 type Props = {
   toggleColorMode: () => void

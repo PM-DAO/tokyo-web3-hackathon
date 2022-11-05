@@ -1,4 +1,4 @@
-import { Button } from '../Button'
+import { Button } from '~/components/atoms'
 
 const METAMASK_APP_DEEP_LINK = 'dapp://pm-dao.github.io/tokyo-web3-hackathon/'
 

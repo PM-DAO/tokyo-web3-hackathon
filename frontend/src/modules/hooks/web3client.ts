@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { ethers } from 'ethers'
 
-import artifact from '../../abi/PMToken.json'
+import artifact from '~/abi/PMToken.json'
 
 const nft_address = '0x250ad80574bf9733713A8cB38769F91264D7C5e1'
 

@@ -1,4 +1,4 @@
-import { ChannelBar } from '../../molecules/ChannelBar'
+import { ChannelBar } from '~/components/molecules/ChannelBar'
 
 export const Stream = () => {
   return (

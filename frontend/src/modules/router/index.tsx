@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { Stream, Collection, StreamSetting } from '../../components/pages'
+import { Stream, Collection, StreamSetting } from '~/components/pages'
 
 export const router = createBrowserRouter([
   { path: '/', element: <Stream /> },

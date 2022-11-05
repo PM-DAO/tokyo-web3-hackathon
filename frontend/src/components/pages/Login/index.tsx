@@ -1,8 +1,8 @@
 import { Container, Stack } from '@chakra-ui/react'
-import { useIsMobileDevice } from '../../../modules/hooks/is_mobile'
-import { MetamaskDesktop, MetamaskMobile } from '../../atoms'
-import { LogoBox } from '../../molecules'
-import { SPLayout } from '../../templates'
+import { useIsMobileDevice } from '~/modules/hooks/is_mobile'
+import { MetamaskDesktop, MetamaskMobile } from '~/components/atoms'
+import { LogoBox } from '~/components/molecules'
+import { SPLayout } from '~/components/templates'
 
 type Props = {
   setAccount: React.Dispatch<React.SetStateAction<string>>
