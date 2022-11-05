@@ -1,10 +1,10 @@
 import { Box, Text } from '@chakra-ui/react'
 
 import { TokenRow } from '~/components/molecules'
-import { TokenItem } from '~/types/Token'
+import { TokenType } from '~/types/Token'
 
 type Props = {
-  tokens: TokenItem[]
+  tokens: TokenType[]
 }
 
 export const UpNext = ({ tokens }: Props) => {

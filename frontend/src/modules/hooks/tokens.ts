@@ -17,12 +17,12 @@ export const useTokens = (client?: ethers.Contract) => {
         const uri = await contentURI(tokenID)
         const tokenUri = await tokenURI(tokenID)
         const { data: metadata }: AxiosResponse<TokenType['metadata']> = await axios.get(tokenUri)
-        const tokenItem: TokenType = {
+        const TokenType: TokenType = {
           tokenID: tokenID,
           youtubeURL: uri,
           metadata
         }
-        items.push(tokenItem)
+        items.push(TokenType)
       }
       setTokens(items)
     }

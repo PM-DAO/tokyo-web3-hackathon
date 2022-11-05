@@ -19,7 +19,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": "npm run lint && npm run check:types",
+    "src/**/*.{ts,tsx}": ["npm run lint","npm run check:types"],
     "**/*.{ts,tsx}": "npm run format"
   },
   "dependencies": {

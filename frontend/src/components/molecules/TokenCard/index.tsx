@@ -4,7 +4,7 @@ import YouTube, { YouTubeProps } from 'react-youtube'
 
 import { TokenType } from '~/types/Token'
 
-type TokenItemProps = {
+type TokenTypeProps = {
   token: TokenType
 }
 const opts: YouTubeProps['opts'] = {
@@ -28,7 +28,7 @@ const parseVideoID = (url: string | string[]) => {
   return prefixRemoved.replace(/&.*/, '')
 }
 
-export const TokenCard = (props: TokenItemProps) => {
+export const TokenCard = (props: TokenTypeProps) => {
   const { token } = props
   const [title, setTitle] = useState('')
   if (!token.youtubeURL[0])

@@ -2,10 +2,10 @@ import { Box, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import YouTube, { YouTubeProps } from 'react-youtube'
 
-import { TokenItem } from '~/types/Token'
+import { TokenType } from '~/types/Token'
 
-type TokenItemProps = {
-  token: TokenItem
+type TokenTypeProps = {
+  token: TokenType
 }
 const opts: YouTubeProps['opts'] = {
   height: '200',
@@ -28,7 +28,7 @@ const parseVideoID = (url: string | string[]) => {
   return prefixRemoved.replace(/&.*/, '')
 }
 
-export const TokenRow = (props: TokenItemProps) => {
+export const TokenRow = (props: TokenTypeProps) => {
   const { token } = props
   const [title, setTitle] = useState('')
   if (!token.youtubeURL[0])
