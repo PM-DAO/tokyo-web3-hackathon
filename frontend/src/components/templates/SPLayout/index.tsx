@@ -9,10 +9,8 @@ type Props = {
 export const SPLayout = ({ children }: Props) => {
   const { bgColor } = useThemeColor()
   return (
-    <Box w="full" h="100vh" bgColor={bgColor}>
-      <Container>
-        <Box boxSize="container.md">{children}</Box>
-      </Container>
-    </Box>
+    <Container w="full" h="100vh" bgColor={bgColor}>
+      <Box boxSize="lg">{children}</Box>
+    </Container>
   )
 }
