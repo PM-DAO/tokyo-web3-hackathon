@@ -14,7 +14,7 @@ export const Login = ({ setAccount }: Props) => {
         <Stack>
           <Container marginX="auto">
             <Image src={`${window.location.origin}/logo.svg`} marginX="auto" marginBottom={6} />
-            <Text fontSize={'2xl'} fontWeight="bold">
+            <Text fontSize={'2xl'} fontWeight="bold" fontFamily={'poppins'}>
               Decentralized Podcast Platform
             </Text>
           </Container>
