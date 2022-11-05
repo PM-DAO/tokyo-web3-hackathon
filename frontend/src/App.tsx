@@ -1,9 +1,8 @@
 import './App.css'
-import { RouterProvider } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { useWeb3Client } from '~/modules/hooks/web3client'
-import { Login } from '~/components/pages'
-import { router } from '~/modules/router'
+import { Collection, Login, Stream, StreamSetting } from '~/components/pages'
 import { Header } from '~/components/organisms'
 declare global {
   interface Window {
@@ -13,14 +12,21 @@ declare global {
 }
 
 function App() {
-  const { account, setAccount } = useWeb3Client()
+  const { account, setAccount, client } = useWeb3Client()
+  if (!client) return <></>
   if (!account) {
     return <Login setAccount={setAccount} />
   }
   return (
     <>
       <Header />
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Stream client={client} />}></Route>
+          <Route path="/collection" element={<Collection />}></Route>
+          <Route path="/stream-setting" element={<StreamSetting />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
