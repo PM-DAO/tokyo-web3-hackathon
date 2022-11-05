@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { MetaMaskProvider } from 'metamask-react'
 
 import App from './App'
+
 import './index.css'
 import { theme } from '~/modules/chakra/theme'
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { TokenItem } from '~/types/tokenItem'
 import { ethers } from 'ethers'
+
+import { TokenItem } from '~/types/tokenItem'
 
 export const useTokens = (client?: ethers.Contract) => {
   const [tokens, setTokens] = useState<Array<TokenItem>>([])
