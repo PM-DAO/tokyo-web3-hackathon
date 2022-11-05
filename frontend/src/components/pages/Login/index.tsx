@@ -1,7 +1,7 @@
 import { Container, Stack } from '@chakra-ui/react'
 import { useIsMobileDevice } from '../../../modules/hooks/is_mobile'
 import { MetamaskDesktop, MetamaskMobile } from '../../atoms'
-import { LogoBox, ToggleThemeButton } from '../../molecules'
+import { LogoBox } from '../../molecules'
 import { SPLayout } from '../../templates'
 
 type Props = {
@@ -13,7 +13,6 @@ export const Login = ({ setAccount }: Props) => {
   return (
     <SPLayout>
       <Stack w="full">
-        <ToggleThemeButton />
         <Container marginX="auto">
           <LogoBox />
         </Container>

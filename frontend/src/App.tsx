@@ -4,6 +4,7 @@ import { useWeb3Client } from './modules/hooks/web3client'
 
 import { Login } from './components/pages'
 import { router } from './modules/router'
+import { Header } from './components/organisms'
 declare global {
   interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,9 +15,19 @@ declare global {
 function App() {
   const { account, setAccount } = useWeb3Client()
   if (!account) {
-    return <Login setAccount={setAccount} />
+    return (
+      <>
+        <Header />
+        <Login setAccount={setAccount} />
+      </>
+    )
   }
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <Header />
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
 export default App
