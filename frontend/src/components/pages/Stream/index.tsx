@@ -1,9 +1,14 @@
+import { Box } from '@chakra-ui/react'
+
 import { ChannelBar } from '~/components/molecules/ChannelBar'
+import { SPLayout } from '~/components/templates'
 
 export const Stream = () => {
   return (
-    <div>
-      <ChannelBar channel={{ name: 'main' }} />
-    </div>
+    <SPLayout>
+      <Box py={4}>
+        <ChannelBar channel={{ name: 'main' }} />
+      </Box>
+    </SPLayout>
   )
 }
