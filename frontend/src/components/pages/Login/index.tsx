@@ -1,7 +1,7 @@
 import { Container, Box, Center, Stack } from '@chakra-ui/react'
 import { useIsMobileDevice } from '../../../modules/hooks/is_mobile'
 import { MetamaskDesktop, MetamaskMobile } from '../../atoms'
-import { LogoBox } from '../../molecules'
+import { LogoBox, ToggleThemeButton } from '../../molecules'
 
 type Props = {
   setAccount: React.Dispatch<React.SetStateAction<string>>
@@ -13,6 +13,7 @@ export const Login = ({ setAccount }: Props) => {
     <Box bgColor="orange.400" width="100vw" height="100vh">
       <Center h="100%">
         <Stack>
+          <ToggleThemeButton />
           <Container marginX="auto">
             <LogoBox />
           </Container>
