@@ -22,7 +22,7 @@ function App() {
       <Header />
       <BrowserRouter>
         <Routes>
-          <Route index element={<Stream client={client} />}></Route>
+          <Route index element={<Stream />}></Route>
           <Route path="/collection" element={<Collection />}></Route>
           <Route path="/stream-setting" element={<StreamSetting />}></Route>
         </Routes>
