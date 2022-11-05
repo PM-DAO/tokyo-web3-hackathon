@@ -1,4 +1,5 @@
 import { Container, Stack } from '@chakra-ui/react'
+
 import { useIsMobileDevice } from '~/modules/hooks/is_mobile'
 import { MetamaskDesktop, MetamaskMobile } from '~/components/atoms'
 import { LogoBox } from '~/components/molecules'

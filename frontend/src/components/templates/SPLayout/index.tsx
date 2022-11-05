@@ -1,5 +1,6 @@
 import { Box, Container } from '@chakra-ui/react'
 import { ReactNode } from 'react'
+
 import { useThemeColor } from '~/modules/hooks/useThemeColor'
 
 type Props = {

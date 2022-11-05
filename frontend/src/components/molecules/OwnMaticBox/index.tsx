@@ -1,4 +1,5 @@
 import { Container, Text } from '@chakra-ui/react'
+
 import { useThemeColor } from '~/modules/hooks/useThemeColor'
 
 type Props = {

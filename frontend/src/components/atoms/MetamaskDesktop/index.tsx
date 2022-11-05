@@ -1,5 +1,6 @@
 import { useMetaMask } from 'metamask-react'
 import { useEffect } from 'react'
+
 import { Button } from '~/components/atoms'
 export interface MetamaskDesktopProps {
   onSetAccount?: React.Dispatch<React.SetStateAction<string>>
