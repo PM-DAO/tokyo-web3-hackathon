@@ -1,42 +1,33 @@
 import { Box, Text } from '@chakra-ui/react'
-import { Contract } from 'ethers'
-import { useMemo } from 'react'
 
+import { tokensData } from '~/data'
 import { ChannelBar, TokenCard } from '~/components/molecules'
 import { UpNext } from '~/components/organisms'
 import { SPLayout } from '~/components/templates'
-import { useTokens } from '~/modules/hooks/tokens'
+import { TokenType } from '~/types/Token'
 
-type Props = {
-  client: Contract
+const UP_NEXT_MAX_COUNT = 3
+
+const getCurrentToken = (): TokenType | null => {
+  return tokensData?.length ? tokensData[0] : null
 }
 
-export const Stream = ({ client }: Props) => {
-  const { tokens } = useTokens(client)
+const getUpNextTokens = (): TokenType[] => {
+  return tokensData?.length ? tokensData.slice(1, UP_NEXT_MAX_COUNT) : []
+}
 
-  const formattedTokens = useMemo(() => {
-    if (!tokens || !tokens.length) {
-      return {
-        currentToken: null,
-        upNextTokens: []
-      }
-    }
-    // #TODO: get token by current time
-    return {
-      currentToken: tokens[0],
-      // #TODO: order by streaming date
-      upNextTokens: tokens.slice(0, tokens.length)
-    }
-  }, [tokens])
+export const Stream = () => {
+  const currentToken = getCurrentToken()
+  const upNextTokens = getUpNextTokens()
 
   return (
     <SPLayout>
       <Box py={4}>
         <ChannelBar channel={{ name: 'main' }} />
       </Box>
-      {formattedTokens.currentToken ? (
+      {currentToken ? (
         <Box py={4}>
-          <TokenCard token={formattedTokens.currentToken} />
+          <TokenCard token={currentToken} />
         </Box>
       ) : (
         <Box py={4}>
@@ -44,7 +35,7 @@ export const Stream = ({ client }: Props) => {
         </Box>
       )}
       <Box py={4}>
-        <UpNext tokens={formattedTokens?.upNextTokens ?? []} />
+        <UpNext tokens={upNextTokens ?? []} />
       </Box>
     </SPLayout>
   )

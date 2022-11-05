@@ -2,7 +2,7 @@ import { Box, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import YouTube, { YouTubeProps } from 'react-youtube'
 
-import { TokenItem } from '~/types/tokenItem'
+import { TokenItem } from '~/types/Token'
 
 type TokenItemProps = {
   token: TokenItem
@@ -63,7 +63,7 @@ export const TokenCard = (props: TokenItemProps) => {
         }}
       >
         <YouTube
-          videoId={parseVideoID(token.youtubeURL)}
+          videoId={parseVideoID(token?.youtubeURL)}
           opts={opts}
           onReady={(e) => setTitle(e.target.videoTitle)}
           onPlay={() => console.log('play')}
