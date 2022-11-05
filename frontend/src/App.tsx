@@ -15,12 +15,7 @@ declare global {
 function App() {
   const { account, setAccount } = useWeb3Client()
   if (!account) {
-    return (
-      <>
-        <Header />
-        <Login setAccount={setAccount} />
-      </>
-    )
+    return <Login setAccount={setAccount} />
   }
   return (
     <>
