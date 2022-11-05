@@ -1,6 +1,6 @@
 import { useMetaMask } from 'metamask-react'
 import { useEffect } from 'react'
-
+import { Button } from '../Button'
 export interface MetamaskDesktopProps {
   onSetAccount?: React.Dispatch<React.SetStateAction<string>>
 }
@@ -19,7 +19,7 @@ export const MetamaskDesktop = (props: MetamaskDesktopProps) => {
 
   if (status === 'unavailable') return <div>MetaMask not available :(</div>
 
-  if (status === 'notConnected') return <button onClick={connect}>Connect to MetaMask</button>
+  if (status === 'notConnected') return <Button onClick={connect}>MetaMaskにログイン</Button>
 
   return <></>
 }
