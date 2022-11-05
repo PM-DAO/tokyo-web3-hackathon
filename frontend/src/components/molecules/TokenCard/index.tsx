@@ -2,10 +2,10 @@ import { Box, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import YouTube, { YouTubeProps } from 'react-youtube'
 
-import { TokenItem } from '~/types/Token'
+import { TokenType } from '~/types/Token'
 
 type TokenItemProps = {
-  token: TokenItem
+  token: TokenType
 }
 const opts: YouTubeProps['opts'] = {
   height: '200',
