@@ -9,7 +9,7 @@
     "codegen:contract:types": "typechain --target ethers-v5 --out-dir './src/types' './src/abi/*.json'",
     "preview": "vite preview",
     "lint": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
-    "format": "prettier --write **/*.{ts,tsx}",
+    "format": "prettier --write **/*.{ts,tsx} --ignore-path .prettierignore",
     "prepare": "cd .. && husky install frontend/.husky"
   },
   "husky": {
