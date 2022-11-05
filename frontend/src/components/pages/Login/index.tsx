@@ -1,5 +1,6 @@
 import { Container, Box, Center, Stack } from '@chakra-ui/react'
 import { useIsMobileDevice } from '../../../modules/hooks/is_mobile'
+import { useThemeColor } from '../../../modules/hooks/useThemeColor'
 import { MetamaskDesktop, MetamaskMobile } from '../../atoms'
 import { LogoBox, ToggleThemeButton } from '../../molecules'
 
@@ -9,8 +10,9 @@ type Props = {
 
 export const Login = ({ setAccount }: Props) => {
   const isMobile = useIsMobileDevice()
+  const { bgColor } = useThemeColor()
   return (
-    <Box bgColor="orange.400" width="100vw" height="100vh">
+    <Box bgColor={bgColor} width="100vw" height="100vh">
       <Center h="100%">
         <Stack>
           <ToggleThemeButton />
