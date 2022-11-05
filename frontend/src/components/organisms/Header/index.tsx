@@ -1,5 +1,6 @@
 import { Box, Container, HStack, Image, Flex, Spacer, useColorMode } from '@chakra-ui/react'
 import { useThemeColor } from '../../../modules/hooks/useThemeColor'
+import { getImageUrl } from '../../../modules/images/getImageUrl'
 import { OwnMaticBox, NFTButton, HomeButton } from '../../molecules'
 
 export const Header = () => {
@@ -10,9 +11,9 @@ export const Header = () => {
       <Flex alignItems="center">
         <Box>
           {colorMode === 'light' ? (
-            <Image src={`${window.location.origin}/logo.svg`} h="70px" w="auto" decoding="async" />
+            <Image src={getImageUrl('logo')} h="70px" w="auto" decoding="async" />
           ) : (
-            <Image src={`${window.location.origin}/logo-white.svg`} h="70px" w="auto" decoding="async" />
+            <Image src={getImageUrl('logo-white')} h="70px" w="auto" decoding="async" />
           )}
         </Box>
         <Spacer />
