@@ -22,11 +22,11 @@ function App() {
   }
   return (
     <SPLayout>
-      <Header client={client} />
       <BrowserRouter basename={process.env.NODE_ENV === 'production' ? '/tokyo-web3-hackathon' : ''}>
+        <Header client={client} />
         <Routes>
           <Route index element={<Stream client={client} />}></Route>
-          <Route path="/collection" element={<Collection />}></Route>
+          <Route path="/collection" element={<Collection account={account} />}></Route>
           <Route path="/stream-setting" element={<StreamSetting />}></Route>
         </Routes>
       </BrowserRouter>

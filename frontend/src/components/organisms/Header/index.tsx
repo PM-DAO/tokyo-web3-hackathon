@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 
 import { getImageUrl } from '~/modules/images/getImageUrl'
 import { OwnMaticBox, NFTButton, HomeButton } from '~/components/molecules'
+import { Link } from '~/components/atoms'
 
 type Props = {
   client?: Contract
@@ -23,16 +24,26 @@ export const Header = ({ client }: Props) => {
     <Container py="4" w="full">
       <Flex alignItems="center">
         <Box>
-          {colorMode === 'light' ? (
-            <Image src={getImageUrl('logo')} h="70px" w="auto" decoding="async" />
-          ) : (
-            <Image src={getImageUrl('logo-white')} h="70px" w="auto" decoding="async" />
-          )}
+          <Link to="/">
+            {colorMode === 'light' ? (
+              <Image src={getImageUrl('logo')} h="70px" w="auto" decoding="async" />
+            ) : (
+              <Image src={getImageUrl('logo-white')} h="70px" w="auto" decoding="async" />
+            )}
+          </Link>
         </Box>
         <Spacer />
         <HStack>
           <OwnMaticBox ownMaticAmount={ownMaticAmount} />
-          {colorMode === 'light' ? <NFTButton toggleColorMode={toggleColorMode} /> : <HomeButton toggleColorMode={toggleColorMode} />}
+          {colorMode === 'light' ? (
+            <Link to="/collection">
+              <NFTButton toggleColorMode={toggleColorMode} />
+            </Link>
+          ) : (
+            <Link to="/">
+              <HomeButton toggleColorMode={toggleColorMode} />
+            </Link>
+          )}
         </HStack>
       </Flex>
     </Container>
