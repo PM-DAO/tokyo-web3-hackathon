@@ -1,6 +1,7 @@
 import { Box, Container, Flex, Image, Input, Text } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
+import { Contract, ethers } from 'ethers'
 
 import { Button } from '~/components/atoms'
 import { DEFAULT_CHANNEL_NAME } from '~/constants'
@@ -9,12 +10,83 @@ import { TokenType } from '~/types/Token'
 
 type Props = {
   account: string
+  client: Contract
 }
 
-export const StreamSetting = ({ account }: Props) => {
+const isValidUrl = (s: string) => {
+  return /^http:\/\/.|^https:\/\/./.test(s)
+}
+
+export const StreamSetting = ({ account, client }: Props) => {
   const params = useParams()
   const navigate = useNavigate()
   const [token, setToken] = useState<TokenType>()
+  const [url, setUrl] = useState('')
+  const [urlError, setUrlError] = useState(true)
+  const [urlErrorMessage, setUrlErrorMessage] = useState('')
+  const [amount, setAmount] = useState('')
+  const [amountError, setAmountError] = useState(true)
+  const [amountErrorMessage, setAmountErrorMessage] = useState('')
+  const [balance, setBalance] = useState<ethers.BigNumber>(ethers.BigNumber.from(0))
+  const [distributedAmount, setDistributedAmount] = useState('0')
+
+  useEffect(() => {
+    client.signer.getBalance().then((b: ethers.BigNumber) => {
+      setBalance(b)
+    })
+  }, [client.signer])
+
+  const isValidEth = useCallback((pay?: ethers.BigNumber, have?: ethers.BigNumber) => {
+    if (pay?.lt(ethers.BigNumber.from(100))) {
+      setAmountErrorMessage('最低100weiの寄付が必要です')
+      return false
+    } else if (have?.lt(pay || 0)) {
+      setAmountErrorMessage('所持金額より多い金額が入力されています')
+      return false
+    }
+    setAmountErrorMessage('')
+    return true
+  }, [])
+
+  const handleSubmit = useCallback(async () => {
+    if (typeof token?.tokenID === 'undefined') return
+    let eth: ethers.BigNumber | undefined = undefined
+    try {
+      eth = ethers.utils.parseEther(amount)
+    } catch {
+      // nothing TODO
+    }
+    if (!isValidUrl(url) || !isValidEth(eth, balance)) return
+    await client.donateToToken(token.tokenID, { value: eth })
+  }, [amount, balance, client, isValidEth, token])
+
+  const handleChangeUrl = useCallback((s: string) => {
+    setUrl(s)
+    if (!isValidUrl(s)) {
+      setUrlError(true)
+      setUrlErrorMessage('http://またはhttps://から入力してください')
+    } else {
+      setUrlError(false)
+      setUrlErrorMessage('')
+    }
+  }, [])
+
+  const handleChangeAmount = useCallback(
+    (s: string) => {
+      setAmount(s)
+      let eth: ethers.BigNumber | undefined = undefined
+      try {
+        eth = ethers.utils.parseEther(s)
+      } catch {
+        // nothing TODO
+      }
+      setAmountError(!isValidEth(eth, balance))
+      if (eth) {
+        setDistributedAmount(ethers.utils.formatEther(eth.div(ethers.BigNumber.from(100))))
+      }
+    },
+    [balance, isValidEth]
+  )
 
   const handleGetToken = useCallback(async (tokenId: number) => {
     const fetchedToken = await getTokenByTokenId(tokenId)
@@ -37,7 +109,7 @@ export const StreamSetting = ({ account }: Props) => {
     }
   }, [token, account])
 
-  if (!token) return <p>loading...</p>
+  if (!token || !client) return <p>loading...</p>
 
   {
     /* #TODO: separate components */
@@ -63,7 +135,15 @@ export const StreamSetting = ({ account }: Props) => {
             配信楽曲のYouTube URL
           </Text>
           <Box mt={2}>
-            <Input color="white" fontSize="lg" placeholder={'https://youtube.com/watch?v=jfKfPfyJ...'} />
+            <Input
+              color="white"
+              fontSize="lg"
+              placeholder={'https://youtube.com/watch?v=jfKfPfyJ...'}
+              isInvalid={urlError}
+              onChange={(e) => handleChangeUrl(e.target.value)}
+              errorBorderColor="crimson"
+            />
+            <Text color="red">{urlErrorMessage}</Text>
           </Box>
         </Box>
         <Box mb={6}>
@@ -74,7 +154,15 @@ export const StreamSetting = ({ account }: Props) => {
             配信費用を報酬として分配して、多くのリスナーに聞いてもらいましょう
           </Text>
           <Box mt={2}>
-            <Input color="white" fontSize="lg" placeholder={'100 MATIC'} />
+            <Input
+              color="white"
+              fontSize="lg"
+              placeholder={'100 MATIC'}
+              onChange={(e) => handleChangeAmount(e.target.value)}
+              isInvalid={amountError}
+              errorBorderColor="crimson"
+            />
+            <Text color="red">{amountErrorMessage}</Text>
           </Box>
         </Box>
         <Box mb={6}>
@@ -96,16 +184,19 @@ export const StreamSetting = ({ account }: Props) => {
           </Text>
           <Box>
             <Text color="white" fontSize="lg">
-              1 MATIC
+              {distributedAmount} MATIC
             </Text>
           </Box>
         </Box>
       </Box>
       <Flex>
-        {/* #TODO: setting */}
-        <Button>支払いする</Button>
+        <Button onClick={handleSubmit} disabled={amountError || urlError}>
+          支払いする
+        </Button>
         <Box mr={4} />
-        <Button theme="secondary">キャンセル</Button>
+        <Link to="/collection">
+          <Button theme="secondary">キャンセル</Button>
+        </Link>
       </Flex>
     </Container>
   )
