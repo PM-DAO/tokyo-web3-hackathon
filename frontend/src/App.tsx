@@ -14,12 +14,13 @@ declare global {
 function App() {
   const { account, setAccount, client } = useWeb3Client()
   if (!client) return <></>
+
   if (!account) {
     return <Login setAccount={setAccount} />
   }
   return (
     <>
-      <Header />
+      <Header client={client} />
       <BrowserRouter>
         <Routes>
           <Route index element={<Stream />}></Route>

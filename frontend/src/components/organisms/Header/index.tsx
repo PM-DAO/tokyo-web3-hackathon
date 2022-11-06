@@ -1,12 +1,26 @@
 import { Box, Container, HStack, Image, Flex, Spacer, useColorMode } from '@chakra-ui/react'
+import { utils, Contract } from 'ethers'
+import { useState, useEffect } from 'react'
 
 import { useThemeColor } from '~/modules/hooks/useThemeColor'
 import { getImageUrl } from '~/modules/images/getImageUrl'
 import { OwnMaticBox, NFTButton, HomeButton } from '~/components/molecules'
 
-export const Header = () => {
+type Props = {
+  client?: Contract
+}
+
+export const Header = ({ client }: Props) => {
   const { bgColor } = useThemeColor()
   const { colorMode, toggleColorMode } = useColorMode()
+  const [ownMaticAmount, setOwnMaticAmount] = useState('0')
+  useEffect(() => {
+    const onLoad = async () => {
+      if (!client) return
+      setOwnMaticAmount(utils.formatEther(await client.signer.getBalance()))
+    }
+    onLoad()
+  }, [client])
   return (
     <Container maxW="container.lg" w="full" bgColor={bgColor} py="4">
       <Flex alignItems="center">
@@ -19,8 +33,7 @@ export const Header = () => {
         </Box>
         <Spacer />
         <HStack>
-          {/* #TODO: fetch own MATIC amount */}
-          <OwnMaticBox ownMaticAmount={0} />
+          <OwnMaticBox ownMaticAmount={ownMaticAmount} />
           {colorMode === 'light' ? <NFTButton toggleColorMode={toggleColorMode} /> : <HomeButton toggleColorMode={toggleColorMode} />}
         </HStack>
       </Flex>
