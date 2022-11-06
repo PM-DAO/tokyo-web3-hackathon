@@ -1,24 +1,28 @@
 import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
+import axios, { AxiosResponse } from 'axios'
 
-import { TokenItem } from '~/types/tokenItem'
+import { TokenType } from '~/types/Token'
 
 export const useTokens = (client?: ethers.Contract) => {
-  const [tokens, setTokens] = useState<Array<TokenItem>>([])
+  const [tokens, setTokens] = useState<Array<TokenType>>([])
   useEffect(() => {
     const getTokens = async () => {
       if (!client) return
-      const { totalSupply, tokenByIndex, contentURI } = client.functions
+      const { totalSupply, tokenByIndex, contentURI, tokenURI } = client.functions
       const supply = parseInt(await totalSupply())
-      const items: TokenItem[] = []
+      const items: TokenType[] = []
       for (let i = 0; i < supply; i++) {
         const tokenID = parseInt(await tokenByIndex(i))
         const uri = await contentURI(tokenID)
-        const tokenItem: TokenItem = {
+        const tokenUri = await tokenURI(tokenID)
+        const { data: metadata }: AxiosResponse<TokenType['metadata']> = await axios.get(tokenUri)
+        const TokenType: TokenType = {
           tokenID: tokenID,
-          youtubeURL: uri
+          youtubeURL: uri,
+          metadata
         }
-        items.push(tokenItem)
+        items.push(TokenType)
       }
       setTokens(items)
     }

@@ -7,9 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build --base=/tokyo-web3-hackathon/",
     "codegen:contract:types": "typechain --target ethers-v5 --out-dir './src/types' './src/abi/*.json'",
+    "check:types": "bash -c tsc --noEmit -p tsconfig.json",
     "preview": "vite preview",
     "lint": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
-    "format": "prettier --write **/*.{ts,tsx}",
+    "format": "prettier --write **/*.{ts,tsx} --ignore-path .prettierignore",
     "prepare": "cd .. && husky install frontend/.husky"
   },
   "husky": {
@@ -18,7 +19,10 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": "npm run lint",
+    "src/**/*.{ts,tsx}": [
+      "npm run lint",
+      "npm run check:types"
+    ],
     "**/*.{ts,tsx}": "npm run format"
   },
   "dependencies": {
