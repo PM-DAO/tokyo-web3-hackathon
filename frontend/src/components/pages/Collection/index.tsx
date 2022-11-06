@@ -1,7 +1,9 @@
+import { Container } from '@chakra-ui/react'
+
 export const Collection = () => {
   return (
-    <div>
+    <Container w="full">
       <p>Collection</p>
-    </div>
+    </Container>
   )
 }
