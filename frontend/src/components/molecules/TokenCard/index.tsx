@@ -86,7 +86,7 @@ export const TokenCard = ({ token }: TokenTypeProps) => {
           onPause={() => console.log('pause')}
           onEnd={() => console.log('end')}
         />
-        <Box bgColor={'orange.600'} p="16px" textAlign="left" borderBottomRadius="md">
+        <Box bgColor={'orange.500'} p="16px" textAlign="left" borderBottomRadius="md">
           <Text color={'gray.100'} fontWeight="bold" fontSize="xl">
             {videoData?.title}
           </Text>
