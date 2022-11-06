@@ -46,6 +46,11 @@ const getTokens = async () => {
   return tokens
 }
 
+export const getMyTokens = async (myAddress: string) => {
+  const tokens = await getTokens()
+  return tokens.filter((token) => token.ownerAddress[0] === myAddress)
+}
+
 export const getFormattedTokens = async () => {
   const tokens = await getTokens()
   const orderedTokens = tokens

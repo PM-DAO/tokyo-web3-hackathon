@@ -26,7 +26,7 @@ function App() {
         <Header client={client} />
         <Routes>
           <Route index element={<Stream client={client} />}></Route>
-          <Route path="/collection" element={<Collection />}></Route>
+          <Route path="/collection" element={<Collection account={account} />}></Route>
           <Route path="/stream-setting" element={<StreamSetting />}></Route>
         </Routes>
       </BrowserRouter>
