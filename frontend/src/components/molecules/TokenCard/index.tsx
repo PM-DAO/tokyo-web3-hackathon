@@ -8,8 +8,8 @@ type TokenTypeProps = {
   token: TokenType
 }
 const opts: YouTubeProps['opts'] = {
-  height: '200',
-  width: '400',
+  height: '300px',
+  width: '100%',
   margin: '0 auto',
   playerVars: {
     autoplay: 1
@@ -59,7 +59,7 @@ export const TokenCard = (props: TokenTypeProps) => {
       <Box
         sx={{
           margin: '16px auto',
-          width: '400px'
+          width: 'full'
         }}
       >
         <YouTube
@@ -70,9 +70,11 @@ export const TokenCard = (props: TokenTypeProps) => {
           onPause={() => console.log('pause')}
           onEnd={() => console.log('end')}
         />
-      </Box>
-      <Box width="400px">
-        <Text>{title}</Text>
+        <Box bgColor={'orange.600'} p="2">
+          <Text color={'gray.100'} fontWeight="bold">
+            {title}
+          </Text>
+        </Box>
       </Box>
     </Box>
   )

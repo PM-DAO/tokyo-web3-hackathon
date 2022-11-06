@@ -1,16 +1,15 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Container, Text } from '@chakra-ui/react'
 
 import { tokensData } from '~/data'
 import { ChannelBar, TokenCard } from '~/components/molecules'
 import { UpNext } from '~/components/organisms'
-import { SPLayout } from '~/components/templates'
 import { getFormattedTokens } from '~/modules/token'
 
 export const Stream = () => {
   const { currentToken, upNextTokens } = getFormattedTokens(tokensData)
 
   return (
-    <SPLayout>
+    <Container w="full">
       <Box py={4}>
         <ChannelBar channel={{ name: 'main' }} />
       </Box>
@@ -26,6 +25,6 @@ export const Stream = () => {
       <Box py={4}>
         <UpNext tokens={upNextTokens ?? []} />
       </Box>
-    </SPLayout>
+    </Container>
   )
 }

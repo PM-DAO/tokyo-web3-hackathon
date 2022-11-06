@@ -22,7 +22,7 @@ export const Header = ({ client }: Props) => {
     onLoad()
   }, [client])
   return (
-    <Container maxW="container.lg" w="full" bgColor={bgColor} py="4">
+    <Container py="4" w="full">
       <Flex alignItems="center">
         <Box>
           {colorMode === 'light' ? (
