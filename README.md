@@ -1,4 +1,8 @@
 # tokyo-web3-hackathon
+
+## プロジェクト名
+DePod - Decentralized Podcast Platform
+
 ## プロジェクト概要
 「音楽配信を”Decentralized”する」
 
