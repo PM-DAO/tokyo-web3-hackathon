@@ -4,3 +4,4 @@
 export type { PMToken } from './PMToken'
 export * as factories from './factories'
 export { PMToken__factory } from './factories/PMToken__factory'
+export type { YouTubeVideoData } from './YouTube'

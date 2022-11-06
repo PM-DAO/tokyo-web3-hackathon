@@ -1,79 +1,59 @@
-import { Box, Text } from '@chakra-ui/react'
-import { useState } from 'react'
-import YouTube, { YouTubeProps } from 'react-youtube'
+import { Box, Text, Image, HStack, Spacer } from '@chakra-ui/react'
+import { useEffect, useMemo, useState } from 'react'
 
+import { formatTimeByAttributes } from '~/modules/token'
+import { getYouTubeData, parseVideoID } from '~/modules/youtube'
+import { YouTubeVideoData } from '~/types'
 import { TokenType } from '~/types/Token'
 
 type TokenTypeProps = {
   token: TokenType
 }
-const opts: YouTubeProps['opts'] = {
-  height: '200',
-  width: '400',
-  margin: '0 auto',
-  playerVars: {
-    autoplay: 1
-  }
-}
 
-const parseVideoID = (url: string | string[]) => {
-  if (!url) return ''
-  let prefixRemoved = ''
-  if (typeof url === 'string') {
-    prefixRemoved = url.replace('https://www.youtube.com/watch?v=', '')
-  } else {
-    prefixRemoved = url[0].replace('https://www.youtube.com/watch?v=', '')
-  }
-  // NOTE: return string removed query params
-  return prefixRemoved.replace(/&.*/, '')
-}
+export const TokenRow = ({ token }: TokenTypeProps) => {
+  const [videoData, setVideoData] = useState<YouTubeVideoData | null>()
 
-export const TokenRow = (props: TokenTypeProps) => {
-  const { token } = props
-  const [title, setTitle] = useState('')
-  if (!token.youtubeURL[0])
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '400px',
-          height: '200px',
-          margin: '0 auto'
-        }}
-      >
-        <Box>no content</Box>
-      </Box>
-    )
+  const videoId = useMemo(() => {
+    return parseVideoID(token.youtubeURL)
+  }, [token])
+
+  useEffect(() => {
+    if (!videoId) return
+    const handleGetYoutubeData = async () => {
+      const data = await getYouTubeData(videoId)
+      setVideoData(data)
+    }
+    handleGetYoutubeData()
+  }, [videoId])
+
+  const streamingTime = useMemo(() => {
+    if (!token.metadata.attributes) return null
+    return formatTimeByAttributes(token.metadata.attributes)
+  }, [token])
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexWrap: 'wrap'
-      }}
-    >
-      <Box
-        sx={{
-          margin: '16px auto',
-          width: '400px'
-        }}
-      >
-        <YouTube
-          videoId={parseVideoID(token.youtubeURL)}
-          opts={opts}
-          onReady={(e) => setTitle(e.target.videoTitle)}
-          onPlay={() => console.log('play')}
-          onPause={() => console.log('pause')}
-          onEnd={() => console.log('end')}
-        />
-      </Box>
-      <Box width="400px">
-        <Text>{title}</Text>
-      </Box>
-    </Box>
+    <>
+      {streamingTime && (
+        <Text fontFamily="poppins" fontWeight="bold" textAlign="left">
+          {streamingTime.startTime}-{streamingTime.endTime}
+        </Text>
+      )}
+      {videoData ? (
+        <Box bgColor="gray.900" h="70px">
+          <HStack>
+            <Box w="60%">
+              <Text color="gray.100" whiteSpace="nowrap" overflow="hidden">
+                {videoData.title}
+              </Text>
+              <Text color="gray.100">{videoData.artistName}</Text>
+            </Box>
+            <Spacer />
+            <Image src={videoData.thumbnailUrl} h="auto" w="30%" />
+          </HStack>
+        </Box>
+      ) : (
+        <p>loading...</p>
+      )}
+    </>
   )
 }
