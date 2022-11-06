@@ -38,7 +38,9 @@ export const formatTimeByAttributes = (attributes: TokenType['metadata']['attrib
 }
 
 export const getFormattedTokens = (tokens: TokenType[]) => {
-  const orderedTokens = sortTokenByDate(tokens)
+  const orderedTokens = tokens
+  // NOTE: temporally comment out
+  // const orderedTokens = sortTokenByDate(tokens)
   return {
     currentToken: orderedTokens?.length ? orderedTokens[0] : null,
     upNextTokens: tokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
