@@ -58,13 +58,23 @@ export const getMyTokens = async (myAddress: string) => {
 
 export const getFormattedTokens = async () => {
   const tokens = await getTokens()
-  const orderedTokens = tokens
-  // NOTE: temporally comment out
-  // const orderedTokens = sortTokenByDate(tokens)
+  const orderedTokens = sortTokenByDate(tokens.filter(filterIsIn24HoursFromNow))
   return {
     currentToken: orderedTokens?.length ? orderedTokens[0] : null,
     upNextTokens: orderedTokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
   }
+}
+
+const filterIsIn24HoursFromNow = (token: TokenType) => {
+  const formattedDate = {
+    daysOfWeek: getDayOfWeekNumber(token.metadata.attributes.find((attribute) => attribute.trait_type === 'Days of the Week')?.value ?? ''),
+    hour: Number(token.metadata.attributes.find((attribute) => attribute.trait_type === 'Hour')?.value ?? 0),
+    minute: Number(token.metadata.attributes.find((attribute) => attribute.trait_type === 'Minute')?.value ?? '00')
+  }
+  const now = new Date()
+  const tokenDate = new Date(`${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${formattedDate.hour}:${formattedDate.minute}`)
+  tokenDate.setDate(tokenDate.getDate() + (formattedDate.daysOfWeek - now.getDay()))
+  return now.getTime() - tokenDate.getTime() <= 1000 * 60 * 60 * 24 && now.getTime() - tokenDate.getTime() < 0
 }
 
 const compareTokenByDate = (a: TokenType, b: TokenType) => {
@@ -80,21 +90,13 @@ const compareTokenByDate = (a: TokenType, b: TokenType) => {
     minute: Number(b.metadata.attributes.find((attribute) => attribute.trait_type === 'Minute')?.value ?? '00')
   }
 
-  // 曜日でソート
-  if (formattedADate.daysOfWeek < formattedBDate.daysOfWeek) {
-    return -1
-  }
+  const now = new Date()
+  const DateA = new Date(`${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${formattedADate.hour}:${formattedADate.minute}`)
+  const DateB = new Date(`${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()} ${formattedBDate.hour}:${formattedBDate.minute}`)
+  DateA.setDate(DateA.getDate() + (formattedADate.daysOfWeek - now.getDay()))
+  DateB.setDate(DateB.getDate() + (formattedBDate.daysOfWeek - now.getDay()))
 
-  // 時間でソート
-  if (formattedADate.hour < formattedBDate.hour) {
-    return -1
-  }
-
-  // 分でソート
-  if (formattedADate.minute < formattedBDate.minute) {
-    return -1
-  }
-  return 0
+  return Math.abs(now.getTime() - DateA.getTime()) < Math.abs(now.getTime() - DateB.getTime()) ? -1 : 1
 }
 
 export const sortTokenByDate = (tokens: TokenType[]): TokenType[] => {
