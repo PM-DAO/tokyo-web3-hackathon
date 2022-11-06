@@ -23,11 +23,9 @@ function App() {
   return (
     <SPLayout>
       <Header client={client} />
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.NODE_ENV === 'production' ? '/tokyo-web3-hackathon' : ''}>
         <Routes>
           <Route index element={<Stream client={client} />}></Route>
-          {/* #NOTE: TMP */}
-          <Route path="/tokyo-web3-hackathon" element={<Stream />}></Route>
           <Route path="/collection" element={<Collection />}></Route>
           <Route path="/stream-setting" element={<StreamSetting />}></Route>
         </Routes>
