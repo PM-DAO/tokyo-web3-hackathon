@@ -9,18 +9,20 @@ export const useTokens = (client?: ethers.Contract) => {
   useEffect(() => {
     const getTokens = async () => {
       if (!client) return
-      const { totalSupply, tokenByIndex, contentURI, tokenURI } = client.functions
+      const { totalSupply, tokenByIndex, contentURI, tokenURI, ownerOf } = client.functions
       const supply = parseInt(await totalSupply())
       const items: TokenType[] = []
       for (let i = 0; i < supply; i++) {
         const tokenID = parseInt(await tokenByIndex(i))
         const uri = await contentURI(tokenID)
         const tokenUri = await tokenURI(tokenID)
+        const ownerAddress = await ownerOf(tokenID)
         const { data: metadata }: AxiosResponse<TokenType['metadata']> = await axios.get(tokenUri)
         const tokenItem: TokenType = {
           tokenID: tokenID,
           youtubeURL: uri,
-          metadata
+          metadata,
+          ownerAddress
         }
         items.push(tokenItem)
       }
