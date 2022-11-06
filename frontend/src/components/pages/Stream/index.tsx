@@ -1,4 +1,5 @@
 import { Box, Container, Text } from '@chakra-ui/react'
+import { Contract } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 
 import { ChannelBar, TokenCard } from '~/components/molecules'
@@ -6,7 +7,11 @@ import { UpNext } from '~/components/organisms'
 import { getFormattedTokens } from '~/modules/token'
 import { TokenType } from '~/types/Token'
 
-export const Stream = () => {
+type Props = {
+  client?: Contract
+}
+
+export const Stream = ({ client }: Props) => {
   const [currentToken, setCurrentToken] = useState<TokenType | null>()
   const [upNextTokens, setUpNextTokens] = useState<TokenType[]>([])
 
@@ -20,6 +25,8 @@ export const Stream = () => {
     handleGetFormattedTokens()
   }, [])
 
+  if (!client) return <></>
+
   return (
     <Container w="full">
       <Box py={4}>
@@ -27,7 +34,7 @@ export const Stream = () => {
       </Box>
       {currentToken ? (
         <Box py={2}>
-          <TokenCard token={currentToken} />
+          <TokenCard token={currentToken} client={client} />
         </Box>
       ) : (
         <Box py={4}>
