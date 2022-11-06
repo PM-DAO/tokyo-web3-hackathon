@@ -1,6 +1,7 @@
-import { Container } from '@chakra-ui/react'
+import { Container, Text, Box } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 
+import { TokenDataGrid } from '~/components/organisms'
 import { getMyTokens } from '~/modules/token'
 import { TokenType } from '~/types/Token'
 
@@ -22,11 +23,18 @@ export const Collection = ({ account }: Props) => {
     handleGetMyTokens()
   }, [])
 
-  console.log(myTokens)
-
   return (
-    <Container w="full">
-      <p>Collection</p>
+    <Container w="full" pt={'8'}>
+      {myTokens && myTokens.length ? (
+        <TokenDataGrid myTokens={myTokens} />
+      ) : (
+        <Box>
+          <Text color={'gray.100'}>所有している DePod NFT はありません</Text>
+          <a href="https://testnets.opensea.io/ja/collection/pmtoken-v3" target="_blank" rel="noopener noreferrer">
+            OpenSea で購入する
+          </a>
+        </Box>
+      )}
     </Container>
   )
 }
