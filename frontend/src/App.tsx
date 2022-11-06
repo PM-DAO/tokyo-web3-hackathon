@@ -27,7 +27,7 @@ function App() {
         <Routes>
           <Route index element={<Stream client={client} />}></Route>
           <Route path="/collection" element={<Collection account={account} />}></Route>
-          <Route path="/stream-setting/:tokenId" element={<StreamSetting account={account} />}></Route>
+          <Route path="/stream-setting/:tokenId" element={<StreamSetting account={account} client={client} />}></Route>
         </Routes>
       </BrowserRouter>
     </SPLayout>
