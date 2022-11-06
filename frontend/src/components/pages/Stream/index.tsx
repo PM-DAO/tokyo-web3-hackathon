@@ -1,12 +1,24 @@
 import { Box, Container, Text } from '@chakra-ui/react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { tokensData } from '~/data'
 import { ChannelBar, TokenCard } from '~/components/molecules'
 import { UpNext } from '~/components/organisms'
 import { getFormattedTokens } from '~/modules/token'
+import { TokenType } from '~/types/Token'
 
 export const Stream = () => {
-  const { currentToken, upNextTokens } = getFormattedTokens(tokensData)
+  const [currentToken, setCurrentToken] = useState<TokenType | null>()
+  const [upNextTokens, setUpNextTokens] = useState<TokenType[]>([])
+
+  const handleGetFormattedTokens = useCallback(async () => {
+    const { currentToken: fetchedCurrentTokens, upNextTokens: fetchedUpNextTokens } = await getFormattedTokens()
+    setCurrentToken(fetchedCurrentTokens)
+    setUpNextTokens(fetchedUpNextTokens)
+  }, [])
+
+  useEffect(() => {
+    handleGetFormattedTokens()
+  }, [])
 
   return (
     <Container w="full">
