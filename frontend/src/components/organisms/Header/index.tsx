@@ -35,7 +35,15 @@ export const Header = ({ client }: Props) => {
         <Spacer />
         <HStack>
           <OwnMaticBox ownMaticAmount={ownMaticAmount} />
-          {colorMode === 'light' ? <NFTButton toggleColorMode={toggleColorMode} /> : <HomeButton toggleColorMode={toggleColorMode} />}
+          {colorMode === 'light' ? (
+            <Link to="/collection">
+              <NFTButton toggleColorMode={toggleColorMode} />
+            </Link>
+          ) : (
+            <Link to="/">
+              <HomeButton toggleColorMode={toggleColorMode} />
+            </Link>
+          )}
         </HStack>
       </Flex>
     </Container>
