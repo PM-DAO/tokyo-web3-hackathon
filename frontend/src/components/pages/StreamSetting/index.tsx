@@ -22,7 +22,7 @@ export const StreamSetting = ({ account, client }: Props) => {
   const navigate = useNavigate()
   const [token, setToken] = useState<TokenType>()
   const [url, setUrl] = useState('')
-  const [urlError, setUrlError] = useState(true)
+  const [urlError, setUrlError] = useState(isValidUrl(token?.youtubeURL?.join(',') || ''))
   const [urlErrorMessage, setUrlErrorMessage] = useState('')
   const [amount, setAmount] = useState('')
   const [amountError, setAmountError] = useState(true)
@@ -142,6 +142,7 @@ export const StreamSetting = ({ account, client }: Props) => {
               isInvalid={urlError}
               onChange={(e) => handleChangeUrl(e.target.value)}
               errorBorderColor="crimson"
+              defaultValue={token.youtubeURL.join(',') || ''}
             />
             <Text color="red">{urlErrorMessage}</Text>
           </Box>
