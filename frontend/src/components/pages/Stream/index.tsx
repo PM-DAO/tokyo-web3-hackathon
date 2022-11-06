@@ -1,17 +1,29 @@
 import { Box, Container, Text } from '@chakra-ui/react'
 import { Contract } from 'ethers'
+import { useCallback, useEffect, useState } from 'react'
 
-import { tokensData } from '~/data'
 import { ChannelBar, TokenCard } from '~/components/molecules'
 import { UpNext } from '~/components/organisms'
 import { getFormattedTokens } from '~/modules/token'
+import { TokenType } from '~/types/Token'
 
 type Props = {
   client?: Contract
 }
 
 export const Stream = ({ client }: Props) => {
-  const { currentToken, upNextTokens } = getFormattedTokens(tokensData)
+  const [currentToken, setCurrentToken] = useState<TokenType | null>()
+  const [upNextTokens, setUpNextTokens] = useState<TokenType[]>([])
+
+  const handleGetFormattedTokens = useCallback(async () => {
+    const { currentToken: fetchedCurrentTokens, upNextTokens: fetchedUpNextTokens } = await getFormattedTokens()
+    setCurrentToken(fetchedCurrentTokens)
+    setUpNextTokens(fetchedUpNextTokens)
+  }, [])
+
+  useEffect(() => {
+    handleGetFormattedTokens()
+  }, [])
 
   if (!client) return <></>
 
