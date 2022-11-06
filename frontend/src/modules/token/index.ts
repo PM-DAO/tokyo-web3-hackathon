@@ -46,6 +46,11 @@ const getTokens = async () => {
   return tokens
 }
 
+export const getTokenByTokenId = async (tokenId: number) => {
+  const tokens = await getTokens()
+  return tokens.find((token) => token.tokenID === tokenId)
+}
+
 export const getMyTokens = async (myAddress: string) => {
   const tokens = await getTokens()
   return tokens.filter((token) => token.ownerAddress[0] === myAddress)
