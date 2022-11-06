@@ -4,21 +4,11 @@ import { tokensData } from '~/data'
 import { ChannelBar, TokenCard } from '~/components/molecules'
 import { UpNext } from '~/components/organisms'
 import { SPLayout } from '~/components/templates'
-import { TokenType } from '~/types/Token'
-
-const UP_NEXT_MAX_COUNT = 3
-
-const getCurrentToken = (): TokenType | null => {
-  return tokensData?.length ? tokensData[0] : null
-}
-
-const getUpNextTokens = (): TokenType[] => {
-  return tokensData?.length ? tokensData.slice(1, UP_NEXT_MAX_COUNT) : []
-}
+import { getCurrentToken, getUpNextTokens } from '~/modules/token'
 
 export const Stream = () => {
-  const currentToken = getCurrentToken()
-  const upNextTokens = getUpNextTokens()
+  const currentToken = getCurrentToken(tokensData)
+  const upNextTokens = getUpNextTokens(tokensData)
 
   return (
     <SPLayout>

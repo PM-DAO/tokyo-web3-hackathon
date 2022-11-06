@@ -2,6 +2,8 @@ import { TokenType } from '~/types/Token'
 
 const STREAMING_DURATION_MINUTES = 5
 
+const UP_NEXT_MAX_COUNT = 3
+
 export const formatTimeByAttributes = (attributes: TokenType['metadata']['attributes']) => {
   const hour = attributes.find((attribute) => attribute.trait_type === 'Hour')?.value
 
@@ -27,4 +29,18 @@ export const formatTimeByAttributes = (attributes: TokenType['metadata']['attrib
     startTime: `${hour}:${minutes}`,
     endTime: `${hour}:${endMinutes}`
   }
+}
+
+export const getCurrentToken = (tokens: TokenType[]): TokenType | null => {
+  return tokens?.length ? tokens[0] : null
+}
+
+export const getUpNextTokens = (tokens: TokenType[]): TokenType[] => {
+  const orderedTokens = sortTokenByCurrentTime(tokens)
+  return tokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
+}
+
+// #TODO: sort by proximity to current time
+export const sortTokenByCurrentTime = (tokens: TokenType[]): TokenType[] => {
+  return tokens
 }
