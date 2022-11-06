@@ -1,8 +1,14 @@
+import { DAYS_OF_WEEK_ARRAY } from '../date'
+
 import { TokenType } from '~/types/Token'
 
 const STREAMING_DURATION_MINUTES = 5
 
 const UP_NEXT_MAX_COUNT = 3
+
+export const getDayOfWeekNumber = (daysOfWeek: string): number => {
+  return DAYS_OF_WEEK_ARRAY.find((dayOfWeek) => dayOfWeek.name === daysOfWeek)?.number ?? 7
+}
 
 export const formatTimeByAttributes = (attributes: TokenType['metadata']['attributes']) => {
   const hour = attributes.find((attribute) => attribute.trait_type === 'Hour')?.value
@@ -36,11 +42,44 @@ export const getCurrentToken = (tokens: TokenType[]): TokenType | null => {
 }
 
 export const getUpNextTokens = (tokens: TokenType[]): TokenType[] => {
-  const orderedTokens = sortTokenByCurrentTime(tokens)
+  const orderedTokens = sortTokenByDate(tokens)
   return tokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
 }
 
-// #TODO: sort by proximity to current time
-export const sortTokenByCurrentTime = (tokens: TokenType[]): TokenType[] => {
+const compareTokenByDate = (a: TokenType, b: TokenType) => {
+  const formattedADate = {
+    daysOfWeek: getDayOfWeekNumber(a.metadata.attributes.find((attribute) => attribute.trait_type === 'Days of the Week')?.value ?? ''),
+    hour: Number(a.metadata.attributes.find((attribute) => attribute.trait_type === 'Hour')?.value ?? 0),
+    minute: Number(a.metadata.attributes.find((attribute) => attribute.trait_type === 'Minute')?.value ?? '00')
+  }
+
+  const formattedBDate = {
+    daysOfWeek: getDayOfWeekNumber(b.metadata.attributes.find((attribute) => attribute.trait_type === 'Days of the Week')?.value ?? ''),
+    hour: Number(b.metadata.attributes.find((attribute) => attribute.trait_type === 'Hour')?.value ?? '0'),
+    minute: Number(b.metadata.attributes.find((attribute) => attribute.trait_type === 'Minute')?.value ?? '00')
+  }
+
+  // 曜日でソート
+  if (formattedADate.daysOfWeek < formattedBDate.daysOfWeek) {
+    return -1
+  }
+
+  // 時間でソート
+  if (formattedADate.hour < formattedBDate.hour) {
+    return -1
+  }
+
+  // 分でソート
+  if (formattedADate.minute < formattedBDate.minute) {
+    return -1
+  }
+  return 0
+}
+
+export const sortTokenByDate = (tokens: TokenType[]): TokenType[] => {
+  // 曜日でソート
+  tokens.sort(compareTokenByDate)
+  // const { currentDaysOfWeekNumber, currentHour, currentMinutes } = getCurrentDate()
+  // #TODO: 現在時刻の近い順にソート
   return tokens
 }
