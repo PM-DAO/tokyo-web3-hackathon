@@ -1,6 +1,10 @@
+import axios, { AxiosResponse } from 'axios'
+
 import { DAYS_OF_WEEK_ARRAY } from '../date'
 
 import { TokenType } from '~/types/Token'
+
+const HOSTED_DEPOD_NFT_URI = 'https://depod-nft.s3.ap-northeast-1.amazonaws.com/tokens.json'
 
 const STREAMING_DURATION_MINUTES = 5
 
@@ -37,13 +41,19 @@ export const formatTimeByAttributes = (attributes: TokenType['metadata']['attrib
   }
 }
 
-export const getFormattedTokens = (tokens: TokenType[]) => {
+const getTokens = async () => {
+  const { data: tokens }: AxiosResponse<TokenType[]> = await axios.get(HOSTED_DEPOD_NFT_URI)
+  return tokens
+}
+
+export const getFormattedTokens = async () => {
+  const tokens = await getTokens()
   const orderedTokens = tokens
   // NOTE: temporally comment out
   // const orderedTokens = sortTokenByDate(tokens)
   return {
     currentToken: orderedTokens?.length ? orderedTokens[0] : null,
-    upNextTokens: tokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
+    upNextTokens: orderedTokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
   }
 }
 
