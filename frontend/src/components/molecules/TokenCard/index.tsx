@@ -68,13 +68,12 @@ export const TokenCard = ({ token }: TokenTypeProps) => {
     >
       <Box
         sx={{
-          margin: '16px auto',
           width: 'full'
         }}
       >
         {streamingTime && (
           <Box mb="8px">
-            <Text fontFamily="poppins" fontWeight="bold" textAlign="left">
+            <Text fontFamily="poppins" fontWeight="bold" textAlign="left" fontSize="xl">
               {streamingTime.startTime}-{streamingTime.endTime}
             </Text>
           </Box>

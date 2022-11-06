@@ -34,8 +34,8 @@ export const TokenRow = ({ token }: TokenTypeProps) => {
   return (
     <Box mb="8px">
       {streamingTime && (
-        <Box p="8px">
-          <Text fontFamily="poppins" fontWeight="bold" textAlign="left" fontSize="lg">
+        <Box py="8px">
+          <Text fontFamily="poppins" fontWeight="bold" textAlign="left" fontSize="xl">
             {streamingTime.startTime}-{streamingTime.endTime}
           </Text>
         </Box>

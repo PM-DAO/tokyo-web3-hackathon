@@ -14,7 +14,7 @@ export const ChannelBar = (props: Props) => {
   return (
     <Box py={2} bgColor="orange.700" borderRadius="sm">
       <Flex alignItems="center" justifyContent="center">
-        <Image src={getImageUrl('chikachika', 'gif')} w={3} h={3} mb="1px" />
+        <Image src={getImageUrl('chikachika', 'gif')} w={2} h={2} mb="1px" />
         <Box ml={2}>
           <Text color="white" fontFamily="poppins">
             #{channel.name}-channel

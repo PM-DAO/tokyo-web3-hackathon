@@ -14,7 +14,7 @@ export const Stream = () => {
         <ChannelBar channel={{ name: 'main' }} />
       </Box>
       {currentToken ? (
-        <Box py={4}>
+        <Box py={2}>
           <TokenCard token={currentToken} />
         </Box>
       ) : (
