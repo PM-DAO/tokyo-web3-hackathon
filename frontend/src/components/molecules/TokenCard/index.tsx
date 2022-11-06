@@ -1,12 +1,16 @@
 import { Box, Text } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import YouTube, { YouTubeProps } from 'react-youtube'
 
+import { formatTimeByAttributes } from '~/modules/token'
+import { getYouTubeData, parseVideoID } from '~/modules/youtube'
+import { YouTubeVideoData } from '~/types'
 import { TokenType } from '~/types/Token'
 
 type TokenTypeProps = {
   token: TokenType
 }
+
 const opts: YouTubeProps['opts'] = {
   height: '300px',
   width: '100%',
@@ -16,21 +20,27 @@ const opts: YouTubeProps['opts'] = {
   }
 }
 
-const parseVideoID = (url: string | string[]) => {
-  if (!url) return ''
-  let prefixRemoved = ''
-  if (typeof url === 'string') {
-    prefixRemoved = url.replace('https://www.youtube.com/watch?v=', '')
-  } else {
-    prefixRemoved = url[0].replace('https://www.youtube.com/watch?v=', '')
-  }
-  // NOTE: return string removed query params
-  return prefixRemoved.replace(/&.*/, '')
-}
+export const TokenCard = ({ token }: TokenTypeProps) => {
+  const [videoData, setVideoData] = useState<YouTubeVideoData | null>()
 
-export const TokenCard = (props: TokenTypeProps) => {
-  const { token } = props
-  const [title, setTitle] = useState('')
+  const videoId = useMemo(() => {
+    return parseVideoID(token.youtubeURL)
+  }, [token])
+
+  const streamingTime = useMemo(() => {
+    if (!token.metadata.attributes) return null
+    return formatTimeByAttributes(token.metadata.attributes)
+  }, [token])
+
+  useEffect(() => {
+    if (!videoId) return
+    const handleGetYoutubeData = async () => {
+      const data = await getYouTubeData(videoId)
+      setVideoData(data)
+    }
+    handleGetYoutubeData()
+  }, [videoId])
+
   if (!token.youtubeURL[0])
     return (
       <Box
@@ -62,17 +72,31 @@ export const TokenCard = (props: TokenTypeProps) => {
           width: 'full'
         }}
       >
+        {streamingTime && (
+          <Box mb="8px">
+            <Text fontFamily="poppins" fontWeight="bold" textAlign="left">
+              {streamingTime.startTime}-{streamingTime.endTime}
+            </Text>
+          </Box>
+        )}
         <YouTube
           videoId={parseVideoID(token?.youtubeURL)}
           opts={opts}
-          onReady={(e) => setTitle(e.target.videoTitle)}
           onPlay={() => console.log('play')}
           onPause={() => console.log('pause')}
           onEnd={() => console.log('end')}
         />
-        <Box bgColor={'orange.600'} p="2">
-          <Text color={'gray.100'} fontWeight="bold">
-            {title}
+        <Box bgColor={'orange.600'} p="16px" textAlign="left" borderBottomRadius="md">
+          <Text color={'gray.100'} fontWeight="bold" fontSize="xl">
+            {videoData?.title}
+          </Text>
+          {videoData?.artistName && (
+            <Text color={'gray.100'} fontSize="lg">
+              {videoData.artistName}
+            </Text>
+          )}
+          <Text color={'gray.300'} fontSize="sm">
+            Address: {token.ownerAddress}
           </Text>
         </Box>
       </Box>
