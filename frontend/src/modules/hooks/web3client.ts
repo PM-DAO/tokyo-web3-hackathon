@@ -28,6 +28,7 @@ export const useWeb3Client = () => {
     const init = async () => {
       const provider = await detectEthereumProvider()
       if (provider && window.ethereum?.isMetaMask) {
+        await window.ethereum.enable()
         let provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = await provider.getSigner()
         const address = await signer.getAddress()
