@@ -124,11 +124,11 @@ export const TokenCard = ({ token, client }: TokenCardProps) => {
           <Text color={'gray.300'} fontSize="sm">
             Address: {token.ownerAddress}
           </Text>
-          {activeWithdraw && (
+          <Box textAlign="right" pt={3}>
             <Button theme="secondary" onClick={handleWithdrawToken}>
               Claim Token
             </Button>
-          )}
+          </Box>
         </Box>
       </Box>
     </Box>
