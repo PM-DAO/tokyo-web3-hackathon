@@ -1,14 +1,16 @@
 import { Box, Text } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import YouTube, { YouTubeProps } from 'react-youtube'
+import { Contract } from 'ethers'
 
 import { formatTimeByAttributes } from '~/modules/token'
 import { getYouTubeData, parseVideoID } from '~/modules/youtube'
 import { YouTubeVideoData } from '~/types'
 import { TokenType } from '~/types/Token'
 
-type TokenTypeProps = {
+type TokenCardProps = {
   token: TokenType
+  client: Contract
 }
 
 const opts: YouTubeProps['opts'] = {
@@ -20,8 +22,12 @@ const opts: YouTubeProps['opts'] = {
   }
 }
 
-export const TokenCard = ({ token }: TokenTypeProps) => {
+const rewardTimeSecond = 10
+
+export const TokenCard = ({ token, client }: TokenCardProps) => {
   const [videoData, setVideoData] = useState<YouTubeVideoData | null>()
+  const [playing, setPlaying] = useState(false)
+  const { withdrawFromToken } = client.functions
 
   const videoId = useMemo(() => {
     return parseVideoID(token.youtubeURL)
@@ -31,6 +37,27 @@ export const TokenCard = ({ token }: TokenTypeProps) => {
     if (!token.metadata.attributes) return null
     return formatTimeByAttributes(token.metadata.attributes)
   }, [token])
+
+  const onPlay = () => {
+    setPlaying(true)
+  }
+  const onPause = () => {
+    setPlaying(false)
+  }
+
+  useEffect(() => {
+    if (!playing) return
+    const t = setTimeout(() => {
+      withdrawFromToken(token.tokenID).catch((err) => {
+        if (/lock time has not expired/.test(err)) {
+          alert('この曲の報酬は受け取り済です')
+        } else {
+          console.error(err)
+        }
+      })
+    }, rewardTimeSecond * 1000)
+    return () => clearTimeout(t)
+  }, [playing])
 
   useEffect(() => {
     if (!videoId) return
@@ -78,13 +105,7 @@ export const TokenCard = ({ token }: TokenTypeProps) => {
             </Text>
           </Box>
         )}
-        <YouTube
-          videoId={parseVideoID(token?.youtubeURL)}
-          opts={opts}
-          onPlay={() => console.log('play')}
-          onPause={() => console.log('pause')}
-          onEnd={() => console.log('end')}
-        />
+        <YouTube videoId={parseVideoID(token?.youtubeURL)} opts={opts} onPlay={onPlay} onPause={onPause} onEnd={() => console.log('end')} />
         <Box bgColor={'orange.500'} p="16px" textAlign="left" borderBottomRadius="md">
           <Text color={'gray.100'} fontWeight="bold" fontSize="xl">
             {videoData?.title}
