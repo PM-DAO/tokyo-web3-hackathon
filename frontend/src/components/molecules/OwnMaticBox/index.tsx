@@ -1,4 +1,4 @@
-import { Container, Text } from '@chakra-ui/react'
+import { Box, Container, Text } from '@chakra-ui/react'
 
 import { useThemeColor } from '~/modules/hooks/useThemeColor'
 
@@ -10,15 +10,17 @@ export const OwnMaticBox = ({ ownMaticAmount }: Props) => {
   const { deepBGColor, contrastTextColor } = useThemeColor()
   return (
     <Container bgColor={deepBGColor} w="max-content" borderRadius="sm" py="2">
-      <Text fontSize="sm" color={contrastTextColor} fontWeight="bold">
-        現在保有しているMATIC総額
+      <Text fontSize="9px" color={contrastTextColor} fontWeight="bold">
+        現在保有しているトークン
       </Text>
-      <Text display="inline" fontSize="12px" fontFamily="poppins" fontWeight="bold" color={contrastTextColor} textAlign="right">
-        {ownMaticAmount}
-      </Text>
-      <Text display="inline" fontSize="4px" fontFamily="poppins" color={contrastTextColor} textAlign="right">
-        MATIC
-      </Text>
+      <Box textAlign="right">
+        <Text display="inline" fontSize="14px" fontFamily="poppins" fontWeight="bold" color={contrastTextColor} textAlign="right">
+          {parseFloat(ownMaticAmount).toFixed(6)}
+        </Text>
+        <Text display="inline" fontSize="2xs" fontFamily="poppins" color={contrastTextColor} textAlign="right">
+          MATIC
+        </Text>
+      </Box>
     </Container>
   )
 }
