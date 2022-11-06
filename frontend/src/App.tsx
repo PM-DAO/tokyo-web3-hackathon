@@ -26,6 +26,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Stream />}></Route>
+          {/* #NOTE: TMP */}
+          <Route path="/tokyo-web3-hackathon" element={<Stream />}></Route>
           <Route path="/collection" element={<Collection />}></Route>
           <Route path="/stream-setting" element={<StreamSetting />}></Route>
         </Routes>
