@@ -25,7 +25,6 @@ export const StreamSetting = ({ account }: Props) => {
 
   useEffect(() => {
     if (!account || !params?.tokenId) return
-    // #NOTE: 所有者でなけれなコレクションページへ
     const numberTokenId = Number(params.tokenId)
     handleGetToken(numberTokenId)
   }, [account, params])
