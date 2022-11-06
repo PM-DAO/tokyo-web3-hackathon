@@ -21,7 +21,7 @@ export const formatTimeByAttributes = (attributes: TokenType['metadata']['attrib
     }
   }
 
-  const endMinutes = Number(minutes) + STREAMING_DURATION_MINUTES
+  const endMinutes = numberMinutes + STREAMING_DURATION_MINUTES
 
   return {
     startTime: `${hour}:${minutes}`,
