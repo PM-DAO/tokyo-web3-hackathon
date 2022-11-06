@@ -13,13 +13,13 @@ declare global {
 }
 
 function App() {
-  const { account, setAccount } = useWeb3Client()
+  const { account, setAccount, client } = useWeb3Client()
   if (!account) {
     return <Login setAccount={setAccount} />
   }
   return (
     <>
-      <Header />
+      <Header client={client} />
       <RouterProvider router={router} />
     </>
   )
