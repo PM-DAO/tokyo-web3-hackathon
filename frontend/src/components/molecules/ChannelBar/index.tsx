@@ -1,4 +1,6 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
+
+import { getImageUrl } from '~/modules/images/getImageUrl'
 
 type ChannelType = {
   name: string
@@ -11,9 +13,14 @@ export const ChannelBar = (props: Props) => {
   const { channel } = props
   return (
     <Box py={2} bgColor="orange.700" borderRadius="sm">
-      <Text color="white" fontFamily="poppins">
-        #{channel.name}-channel
-      </Text>
+      <Flex alignItems="center" justifyContent="center">
+        <Image src={getImageUrl('chikachika', 'gif')} w={3} h={3} mb="1px" />
+        <Box ml={2}>
+          <Text color="white" fontFamily="poppins">
+            #{channel.name}-channel
+          </Text>
+        </Box>
+      </Flex>
     </Box>
   )
 }
