@@ -100,9 +100,6 @@ const compareTokenByDate = (a: TokenType, b: TokenType) => {
 }
 
 export const sortTokenByDate = (tokens: TokenType[]): TokenType[] => {
-  // 曜日でソート
   tokens.sort(compareTokenByDate)
-  // const { currentDaysOfWeekNumber, currentHour, currentMinutes } = getCurrentDate()
-  // #TODO: 現在時刻の近い順にソート
   return tokens
 }
