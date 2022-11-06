@@ -37,13 +37,12 @@ export const formatTimeByAttributes = (attributes: TokenType['metadata']['attrib
   }
 }
 
-export const getCurrentToken = (tokens: TokenType[]): TokenType | null => {
-  return tokens?.length ? tokens[0] : null
-}
-
-export const getUpNextTokens = (tokens: TokenType[]): TokenType[] => {
+export const getFormattedTokens = (tokens: TokenType[]) => {
   const orderedTokens = sortTokenByDate(tokens)
-  return tokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
+  return {
+    currentToken: orderedTokens?.length ? orderedTokens[0] : null,
+    upNextTokens: tokens?.length ? orderedTokens.slice(1, UP_NEXT_MAX_COUNT) : []
+  }
 }
 
 const compareTokenByDate = (a: TokenType, b: TokenType) => {

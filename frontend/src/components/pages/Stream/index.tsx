@@ -4,11 +4,10 @@ import { tokensData } from '~/data'
 import { ChannelBar, TokenCard } from '~/components/molecules'
 import { UpNext } from '~/components/organisms'
 import { SPLayout } from '~/components/templates'
-import { getCurrentToken, getUpNextTokens } from '~/modules/token'
+import { getFormattedTokens } from '~/modules/token'
 
 export const Stream = () => {
-  const currentToken = getCurrentToken(tokensData)
-  const upNextTokens = getUpNextTokens(tokensData)
+  const { currentToken, upNextTokens } = getFormattedTokens(tokensData)
 
   return (
     <SPLayout>
