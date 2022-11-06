@@ -1,6 +1,7 @@
 export type TokenType = {
   tokenID: number
   youtubeURL: string[]
+  ownerAddress: string[]
   metadata: TokenMetadata
 }
 

@@ -1,6 +1,8 @@
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { SPLayout } from './components/templates'
+
 import { useWeb3Client } from '~/modules/hooks/web3client'
 import { Collection, Login, Stream, StreamSetting } from '~/components/pages'
 import { Header } from '~/components/organisms'
@@ -19,7 +21,7 @@ function App() {
     return <Login setAccount={setAccount} />
   }
   return (
-    <>
+    <SPLayout>
       <Header client={client} />
       <BrowserRouter>
         <Routes>
@@ -28,7 +30,7 @@ function App() {
           <Route path="/stream-setting" element={<StreamSetting />}></Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </SPLayout>
   )
 }
 

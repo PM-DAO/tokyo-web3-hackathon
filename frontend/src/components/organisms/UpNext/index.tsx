@@ -10,10 +10,10 @@ type Props = {
 export const UpNext = ({ tokens }: Props) => {
   return (
     <Box>
-      <Text fontFamily="poppins" fontSize="xl" textAlign="left">
+      <Text fontFamily="poppins" fontSize="2xl" textAlign="left">
         UP NEXT
       </Text>
-      <Box border="2px" mt={2} />
+      <Box border="2px" mt={2} mb={2} />
       {tokens.length ? tokens.map((token) => <TokenRow token={token} key={token.tokenID} />) : <Text>Not up next tokens</Text>}
     </Box>
   )

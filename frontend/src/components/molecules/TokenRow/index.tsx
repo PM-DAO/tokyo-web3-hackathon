@@ -1,4 +1,4 @@
-import { Box, Text, Image, HStack, Spacer } from '@chakra-ui/react'
+import { Box, Text, Image, Spacer, Flex } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 
 import { formatTimeByAttributes } from '~/modules/token'
@@ -32,28 +32,30 @@ export const TokenRow = ({ token }: TokenTypeProps) => {
   }, [token])
 
   return (
-    <>
+    <Box mb="8px">
       {streamingTime && (
-        <Text fontFamily="poppins" fontWeight="bold" textAlign="left">
-          {streamingTime.startTime}-{streamingTime.endTime}
-        </Text>
+        <Box py="8px">
+          <Text fontFamily="poppins" fontWeight="bold" textAlign="left" fontSize="xl">
+            {streamingTime.startTime}-{streamingTime.endTime}
+          </Text>
+        </Box>
       )}
       {videoData ? (
-        <Box bgColor="gray.900" h="70px">
-          <HStack>
-            <Box w="60%">
-              <Text color="gray.100" whiteSpace="nowrap" overflow="hidden">
+        <Box bgColor="orange.500" borderRadius="md" p="16px">
+          <Flex>
+            <Box w="60%" textAlign={'left'}>
+              <Text color="gray.100" whiteSpace="nowrap" overflow="hidden" fontSize={'xl'} fontWeight="bold">
                 {videoData.title}
               </Text>
               <Text color="gray.100">{videoData.artistName}</Text>
             </Box>
             <Spacer />
             <Image src={videoData.thumbnailUrl} h="auto" w="30%" />
-          </HStack>
+          </Flex>
         </Box>
       ) : (
         <p>loading...</p>
       )}
-    </>
+    </Box>
   )
 }

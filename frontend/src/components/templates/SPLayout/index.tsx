@@ -1,4 +1,4 @@
-import { Box, Container } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 import { useThemeColor } from '~/modules/hooks/useThemeColor'
@@ -10,8 +10,10 @@ type Props = {
 export const SPLayout = ({ children }: Props) => {
   const { bgColor } = useThemeColor()
   return (
-    <Container maxW="container.lg" w="full" minH="100vh" maxH="full" bgColor={bgColor}>
-      <Box boxSize="lg">{children}</Box>
-    </Container>
+    <>
+      <Container minW="320px" w="600px" maxW="container.lg" minH="100vh" maxH="full" bgColor={bgColor}>
+        {children}
+      </Container>
+    </>
   )
 }

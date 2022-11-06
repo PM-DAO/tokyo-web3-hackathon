@@ -17,7 +17,6 @@ export const parseVideoID = (url: string | string[]) => {
 export const getYouTubeData = async (videoId: string): Promise<YouTubeVideoData | null> => {
   try {
     const res = await axios.get(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&feature=emb_logo&format=json`)
-    console.debug({ res })
     return {
       title: res.data.title,
       thumbnailUrl: res.data.thumbnail_url,

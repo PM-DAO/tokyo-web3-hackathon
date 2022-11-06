@@ -2,7 +2,6 @@ import { Box, Container, HStack, Image, Flex, Spacer, useColorMode } from '@chak
 import { utils, Contract } from 'ethers'
 import { useState, useEffect } from 'react'
 
-import { useThemeColor } from '~/modules/hooks/useThemeColor'
 import { getImageUrl } from '~/modules/images/getImageUrl'
 import { OwnMaticBox, NFTButton, HomeButton } from '~/components/molecules'
 
@@ -11,7 +10,6 @@ type Props = {
 }
 
 export const Header = ({ client }: Props) => {
-  const { bgColor } = useThemeColor()
   const { colorMode, toggleColorMode } = useColorMode()
   const [ownMaticAmount, setOwnMaticAmount] = useState('0')
   useEffect(() => {
@@ -22,7 +20,7 @@ export const Header = ({ client }: Props) => {
     onLoad()
   }, [client])
   return (
-    <Container maxW="container.lg" w="full" bgColor={bgColor} py="4">
+    <Container py="4" w="full">
       <Flex alignItems="center">
         <Box>
           {colorMode === 'light' ? (
