@@ -9,7 +9,7 @@ type Props = {
 
 export const TokenDataGrid = ({ myTokens }: Props) => {
   return (
-    <Grid templateColumns="repeat(2, 1fr)" gap={myTokens.length}>
+    <Grid templateColumns="repeat(2, 1fr)" gap="6">
       {myTokens.map((token) => (
         <TokenDataCard key={token.tokenID} {...token} />
       ))}
