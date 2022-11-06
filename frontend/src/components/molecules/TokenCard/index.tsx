@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import YouTube, { YouTubeProps } from 'react-youtube'
 import { Contract } from 'ethers'
 
@@ -7,6 +7,7 @@ import { formatTimeByAttributes } from '~/modules/token'
 import { getYouTubeData, parseVideoID } from '~/modules/youtube'
 import { YouTubeVideoData } from '~/types'
 import { TokenType } from '~/types/Token'
+import { Button } from '~/components/atoms'
 
 type TokenCardProps = {
   token: TokenType
@@ -27,6 +28,7 @@ const rewardTimeSecond = 10
 export const TokenCard = ({ token, client }: TokenCardProps) => {
   const [videoData, setVideoData] = useState<YouTubeVideoData | null>()
   const [playing, setPlaying] = useState(false)
+  const [activeWithdraw, setActiveWithdraw] = useState(false)
   const { withdrawFromToken } = client.functions
 
   const videoId = useMemo(() => {
@@ -45,16 +47,20 @@ export const TokenCard = ({ token, client }: TokenCardProps) => {
     setPlaying(false)
   }
 
+  const handleWithdrawToken = useCallback(() => {
+    withdrawFromToken(token.tokenID).catch((err) => {
+      if (/lock time has not expired/.test(err)) {
+        alert('この曲の報酬は受け取り済です')
+      } else {
+        console.error(err)
+      }
+    })
+  }, [])
+
   useEffect(() => {
     if (!playing) return
     const t = setTimeout(() => {
-      withdrawFromToken(token.tokenID).catch((err) => {
-        if (/lock time has not expired/.test(err)) {
-          alert('この曲の報酬は受け取り済です')
-        } else {
-          console.error(err)
-        }
-      })
+      setActiveWithdraw(true)
     }, rewardTimeSecond * 1000)
     return () => clearTimeout(t)
   }, [playing])
@@ -118,6 +124,11 @@ export const TokenCard = ({ token, client }: TokenCardProps) => {
           <Text color={'gray.300'} fontSize="sm">
             Address: {token.ownerAddress}
           </Text>
+          {activeWithdraw && (
+            <Button theme="secondary" onClick={handleWithdrawToken}>
+              Claim Token
+            </Button>
+          )}
         </Box>
       </Box>
     </Box>
